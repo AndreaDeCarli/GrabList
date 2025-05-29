@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.koin.androidx.compose)
     testImplementation(libs.junit)
     implementation(libs.ktor.serialization.kotlinx.json)
     androidTestImplementation(libs.androidx.junit)
