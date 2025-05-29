@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">GrabList</string>
     <string name="home_title">Shopping Lists</string>
     <string name="favs_title">Favorites</string>
     <string name="prof_title">Profile</string>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title">Liste della spesa</string>
+    <string name="favs_title">Preferiti</string>
+    <string name="prof_title">Profilo</string>
+    <string name="new_product_title">Aggiungi nuovo prodotto</string>
+    <string name="new_list_title">Aggiungi nuova lista</string>
+    <string name="settings_title">Impostazioni</string>
+</resources>
