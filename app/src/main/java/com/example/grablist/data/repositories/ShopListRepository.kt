@@ -8,7 +8,6 @@ import com.example.grablist.data.database.ShopList
 import com.example.grablist.data.database.ShopListDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 
 class ShopListRepository(
     private val shopListDao: ShopListDao,
