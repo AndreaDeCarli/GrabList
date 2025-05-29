@@ -15,11 +15,11 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopAppBar(/*navController: NavController*/ title: String, goBack: Boolean){
+fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean){
     TopAppBar(
         title = { Text(title) },
         navigationIcon = { if (goBack) {
-            IconButton( onClick = {/*navController.navigateUp()*/}) {
+            IconButton( onClick = {navController.navigateUp()}) {
                 Icon(Icons.Filled.ArrowBackIosNew, "Back")
             }
         } },

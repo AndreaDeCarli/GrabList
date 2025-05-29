@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.grablist.ui.screens.HomeScreen
 import kotlinx.serialization.Serializable
 
 sealed interface NavRoute {
@@ -21,6 +22,12 @@ fun GrabListNavGraph(navController: NavHostController) {
         startDestination = NavRoute.HomeScreen
     ) {
         composable<NavRoute.HomeScreen> {
+            HomeScreen(navController)
+        }
+        composable<NavRoute.Favorites> {
+            TODO()
+        }
+        composable<NavRoute.Profile> {
             TODO()
         }
     }

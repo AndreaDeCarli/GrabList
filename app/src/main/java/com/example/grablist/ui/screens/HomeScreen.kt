@@ -7,24 +7,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.grablist.ui.composables.MainBottomAppBar
 import com.example.grablist.ui.composables.MainTopAppBar
 
 @Composable
-fun HomeScreen (){
+fun HomeScreen (navController: NavController){
     Scaffold(
-        topBar = { MainTopAppBar(title = "Home", goBack = false) },
-        bottomBar = { MainBottomAppBar(active = 1, navController = rememberNavController()) }
+        topBar = { MainTopAppBar(navController = navController,title = "Home", goBack = false) },
+        bottomBar = { MainBottomAppBar(active = 1, navController = navController) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Text("decaaaaaaa")
         }
     }
-}
-
-@Preview
-@Composable
-fun HomeScreenPreview(){
-    HomeScreen()
 }
