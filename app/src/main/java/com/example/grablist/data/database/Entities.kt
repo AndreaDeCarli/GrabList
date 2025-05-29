@@ -13,9 +13,6 @@ data class ShopList(
     val title: String,
 
     @ColumnInfo
-    val profileId: Long,
-
-    @ColumnInfo
     val iconId: Long,
 
     @ColumnInfo
@@ -26,9 +23,6 @@ data class ShopList(
 data class Product(
     @PrimaryKey(autoGenerate = true)
     val productId: Long = 0,
-
-    @ColumnInfo
-    val profileId: Long,
 
     @ColumnInfo
     val name: String,

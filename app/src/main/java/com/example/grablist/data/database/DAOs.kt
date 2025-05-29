@@ -2,6 +2,7 @@ package com.example.grablist.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +32,11 @@ interface ProductDao{
     @Delete
     suspend fun delete(product: Product)
 
+    @Query("SELECT * FROM product WHERE productId = :id")
+    fun getProductById(id: Long): Flow<Product>
+
     @Query("SELECT * FROM product JOIN crossref ON product.productId = crossref.productId WHERE shopListId = :id")
-    fun getProductsByListId(id: Int): Flow<List<Product>>
+    fun getProductsByListId(id: Long): Flow<List<Product>>
 
     @Query("SELECT * FROM product WHERE favorite = 1")
     fun getFavorites(): Flow<List<Product>>
@@ -43,4 +47,13 @@ interface ProductDao{
 interface CrossRefDao{
     @Query("SELECT * FROM crossRef")
     fun getAll(): Flow<List<CrossRef>>
+
+    @Insert
+    suspend fun insert(crossRef: CrossRef)
+
+    @Delete
+    suspend fun delete(crossRef: CrossRef)
+
+    @Query("SELECT * FROM crossref WHERE shopListId = :id")
+    fun getCrossRefById(id: Long): Flow<List<CrossRef>>
 }
