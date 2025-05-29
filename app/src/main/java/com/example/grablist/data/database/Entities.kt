@@ -40,14 +40,6 @@ data class Product(
     val favorite: Boolean
 )
 
-@Entity
-data class Profile(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-
-    @ColumnInfo
-    val name: String,
-)
 
 @Entity(primaryKeys = ["shopListId", "productId"])
 data class CrossRef(

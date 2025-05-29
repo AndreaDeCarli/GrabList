@@ -6,18 +6,6 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
-@Dao
-interface ProfileDao{
-    @Query("SELECT * FROM profile")
-    fun getAll(): Flow<List<Profile>>
-
-    @Upsert
-    suspend fun upsert(profile: Profile)
-
-    @Delete
-    suspend fun delete(profile: Profile)
-
-}
 
 @Dao
 interface ShopListDao{
@@ -29,9 +17,6 @@ interface ShopListDao{
 
     @Delete
     suspend fun delete(shopList: ShopList)
-
-    @Query("SELECT * FROM shopList WHERE profileId = :id")
-    fun getShopListByProfile(id: Int): Flow<List<ShopList>>
 
 }
 
@@ -49,8 +34,8 @@ interface ProductDao{
     @Query("SELECT * FROM product JOIN crossref ON product.productId = crossref.productId WHERE shopListId = :id")
     fun getProductsByListId(id: Int): Flow<List<Product>>
 
-    @Query("SELECT * FROM product WHERE profileId = :id AND favorite = 1")
-    fun getFavoritesByProfile(id: Int): Flow<List<Product>>
+    @Query("SELECT * FROM product WHERE favorite = 1")
+    fun getFavorites(): Flow<List<Product>>
 }
 
 
