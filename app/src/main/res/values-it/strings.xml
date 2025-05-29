@@ -6,4 +6,6 @@
     <string name="new_product_title">Aggiungi nuovo prodotto</string>
     <string name="new_list_title">Aggiungi nuova lista</string>
     <string name="settings_title">Impostazioni</string>
+    <string name="title_generic">Titolo</string>
+    <string name="date_generic">Data</string>
 </resources>
