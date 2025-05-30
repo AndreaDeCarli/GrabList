@@ -6,6 +6,7 @@ import com.example.grablist.data.database.CrossRefDao
 import com.example.grablist.data.database.ShopListDatabase
 import com.example.grablist.data.repositories.ShopListRepository
 import com.example.grablist.ui.viewmodels.AddShopListViewModel
+import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
 import com.example.grablist.ui.viewmodels.ShopListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.scope.get
@@ -31,6 +32,8 @@ val appModule = module {
     }
 
     viewModel { ShopListViewModel(get()) }
+
+    viewModel { (param1: Long) -> ProductsInShopListViewModel(param1, get()) }
 
     viewModel { AddShopListViewModel() }
 

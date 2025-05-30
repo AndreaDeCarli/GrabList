@@ -29,7 +29,7 @@ val AccentOrange = Color(0xFFFFA000)
 val AccentGreen = Color(0xFF4CAF50)
 
 val BackgroundLight = Color(0xFFF5F5F5)
-val SurfaceBackground = Color(0xFFFFFFFF)
+val SurfaceBackground = Color(0xFFF6E9DD)
 
 val TextPrimary = Color(0xFF212121)
 val TextSecondary = Color(0xFF757575)

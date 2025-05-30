@@ -47,5 +47,18 @@ class ShopListRepository(
         productDao.upsert(newProduct)
     }
 
+    fun getProductsByShopListId(id: Long) : Flow<List<Product>>{
+        return productDao.getProductsByListId(id)
+    }
+
+    suspend fun deleteProductFromList(product: Product, shopList: ShopList){
+        if (!product.favorite) {
+            productDao.delete(product)
+        }
+        val crossRefToDelete = requireNotNull(
+            crossRef.first().find { it.shopListId == shopList.shopListId && it.productId == product.productId })
+        crossRefDao.delete(crossRefToDelete)
+    }
+
 
 }

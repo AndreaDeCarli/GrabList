@@ -5,7 +5,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.grablist.R
 import com.example.grablist.ui.composables.MainBottomAppBar
 import com.example.grablist.ui.composables.MainTopAppBar
 
@@ -14,7 +16,7 @@ fun Favorites(navController: NavController){
     Scaffold(
         topBar = { MainTopAppBar(
             navController = navController,
-            title = "Favorites",
+            title = stringResource(id = R.string.favs_title),
             goBack = false) },
         bottomBar = { MainBottomAppBar(
             navController = navController,
