@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,33 +36,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.grablist.data.database.Product
+import com.example.grablist.data.database.ShopList
 import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
 import com.example.grablist.ui.viewmodels.ProductsState
-import com.example.grablist.ui.viewmodels.ShopListState
-import com.example.grablist.ui.viewmodels.ShopListViewModel
+import com.example.grablist.ui.viewmodels.ProductsViewModel
 
 @Composable
 fun LazyProductColumn(
     navController: NavController,
     showFavorites: Boolean = false,
     state: ProductsState,
-    vm: ProductsInShopListViewModel
+    shopList: ShopList,
+    vm: ProductsViewModel,
+    modifier: Modifier = Modifier
 ) {
     val products = state.products
-    if (products.isNotEmpty()){
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(modifier = modifier.fillMaxSize()) {
+        if (products.isNotEmpty()){
             items(state.products) {item ->
-
+                ProductCard(
+                    product = item,
+                    vm = vm,
+                    shopList = shopList,
+                    showFavorites = showFavorites)
             }
+        }
     }
 }
 
 @Composable
-fun ProductCard(){
+fun ProductCard(
+    product: Product,
+    vm: ProductsViewModel,
+    shopList: ShopList,
+    showFavorites: Boolean){
     var expanded by remember { mutableStateOf(false) }
     Card(
-        onClick = onClick,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp
         ),
@@ -74,7 +88,7 @@ fun ProductCard(){
             contentColor = MaterialTheme.colorScheme.onSecondary
         )
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxSize()
         ) {
@@ -83,7 +97,7 @@ fun ProductCard(){
                     .fillMaxHeight()
                     .weight(0.25F),
                 contentAlignment = Alignment.Center,
-            ){
+            ) {
                 Image(
                     Icons.Outlined.Image,
                     "List picture",
@@ -93,21 +107,28 @@ fun ProductCard(){
                         .fillMaxSize()
                 )
             }
-            Column (
+            Row(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .weight(0.65F)
             ) {
-                Text(text = item.title, fontSize = 20.sp, modifier = Modifier.padding(5.dp), color = MaterialTheme.colorScheme.onSecondary)
                 Text(
-                    text = item.date,
-                    fontSize = 14.sp,
+                    text = product.name,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(5.dp),
                     color = MaterialTheme.colorScheme.onSecondary
                 )
+                if (showFavorites){
+                    if (product.favorite){
+                        Icon(Icons.Filled.Favorite, "Favorite")
+                    }
+                    else{
+                        Icon(Icons.Outlined.FavoriteBorder, "FavoriteEmpty")
+                    }
+                }
             }
 
-            Box(modifier = Modifier.weight(0.1F)){
+            Box(modifier = Modifier.weight(0.1F)) {
                 IconButton(
                     onClick = { expanded = !expanded },
                     modifier = Modifier
@@ -123,7 +144,7 @@ fun ProductCard(){
                     DropdownMenuItem(
                         text = { Text("Remove") },
                         onClick = {
-                            vm.deleteShopList(item)
+                            vm.deleteProduct(product, shopList)
                             expanded = false
                         }
                     )
@@ -131,5 +152,4 @@ fun ProductCard(){
             }
         }
     }
-
-}}
+}

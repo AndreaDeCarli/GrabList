@@ -1,0 +1,41 @@
+package com.example.grablist.ui.viewmodels
+
+import androidx.lifecycle.ViewModel
+import com.example.grablist.data.database.Product
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+
+data class AddProductState(
+    val name: String = "",
+    val imageUri: String = "",
+    val favorite: Boolean = false
+
+    ) {
+    val canSubmit get() = name.isNotBlank()
+
+    fun toProduct() = Product(
+        name = name,
+        imageUri = imageUri,
+        favorite = favorite,
+    )
+}
+
+interface AddProductActions {
+    fun setName(name: String)
+    fun setFavorite(fav: Boolean)
+
+}
+
+class AddNewProductViewModel : ViewModel() {
+    private val _state = MutableStateFlow(AddProductState())
+    val state = _state.asStateFlow()
+
+    val actions = object : AddProductActions {
+        override fun setName(name: String) =
+            _state.update { it.copy(name = name) }
+
+        override fun setFavorite(fav: Boolean) =
+            _state.update { it.copy(favorite = fav) }
+    }
+}

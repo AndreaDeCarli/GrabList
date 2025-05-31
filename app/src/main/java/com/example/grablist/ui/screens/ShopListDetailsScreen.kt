@@ -6,8 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -18,18 +24,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.grablist.data.database.ShopList
+import com.example.grablist.ui.NavRoute
+import com.example.grablist.ui.composables.LazyProductColumn
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
 import com.example.grablist.ui.viewmodels.ProductsState
+import com.example.grablist.ui.viewmodels.ProductsViewModel
 
 @Composable
 fun ShopListDetailsScreen(
     navController: NavController,
     shopList: ShopList,
-    vm: ProductsInShopListViewModel,
+    vm: ProductsViewModel,
     state: ProductsState) {
     Scaffold(
-        topBar = { MainTopAppBar(navController = navController, title = shopList.title, goBack = true) }
+        topBar = { MainTopAppBar(navController = navController, title = shopList.title, goBack = true) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(NavRoute.AddNewProduct(shopList.shopListId)) },
+                elevation = FloatingActionButtonDefaults.elevation(4.dp)
+            ) {
+                Icon(Icons.Filled.Add, "Add")
+            }
+        }
     ) { innerPadding ->
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,7 +54,9 @@ fun ShopListDetailsScreen(
         ) {
             Surface (
                 color = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.padding(innerPadding).weight(0.2F)
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .weight(0.25F)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -53,11 +72,18 @@ fun ShopListDetailsScreen(
                         elevation = ButtonDefaults.buttonElevation(12.dp),
                     ) {
                         Text("Start")
+                        Icon(Icons.Filled.PlayArrow, "Start")
                     }
                 }
             }
-
-
+            LazyProductColumn(
+                modifier = Modifier.weight(0.75F),
+                navController = navController,
+                shopList = shopList,
+                state = state,
+                vm = vm,
+                showFavorites = true
+            )
         }
     }
 }

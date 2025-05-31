@@ -18,7 +18,7 @@ class ShopListRepository(
 
     val products: Flow<List<Product>> = productDao.getAll()
 
-    val crossRef: Flow<List<CrossRef>> = crossRefDao.getAll()
+    private val crossRef: Flow<List<CrossRef>> = crossRefDao.getAll()
 
     suspend fun addShopList(shopList: ShopList){
         shopListDao.upsert(shopList)
@@ -58,6 +58,16 @@ class ShopListRepository(
         val crossRefToDelete = requireNotNull(
             crossRef.first().find { it.shopListId == shopList.shopListId && it.productId == product.productId })
         crossRefDao.delete(crossRefToDelete)
+    }
+
+    suspend fun addProduct(product: Product) {
+        productDao.upsert(product)
+    }
+
+    suspend fun addProductAndReference(product: Product, shopList: ShopList){
+        val id = productDao.upsert(product)
+        val shopListId = shopList.shopListId
+        crossRefDao.insert(CrossRef(shopListId, id))
     }
 
 

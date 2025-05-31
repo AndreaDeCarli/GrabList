@@ -27,7 +27,7 @@ interface ProductDao{
     fun getAll(): Flow<List<Product>>
 
     @Upsert
-    suspend fun upsert(product: Product)
+    suspend fun upsert(product: Product): Long
 
     @Delete
     suspend fun delete(product: Product)
