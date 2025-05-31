@@ -8,4 +8,5 @@
     <string name="settings_title">Impostazioni</string>
     <string name="title_generic">Titolo</string>
     <string name="date_generic">Data</string>
+    <string name="remove_generic">Rimuovi</string>
 </resources>

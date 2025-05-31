@@ -21,14 +21,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.grablist.R
 import com.example.grablist.data.database.ShopList
 import com.example.grablist.ui.NavRoute
 import com.example.grablist.ui.composables.LazyProductColumn
 import com.example.grablist.ui.composables.MainTopAppBar
-import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
-import com.example.grablist.ui.viewmodels.ProductsState
+import com.example.grablist.ui.viewmodels.ProductsInListState
 import com.example.grablist.ui.viewmodels.ProductsViewModel
 
 @Composable
@@ -36,7 +38,7 @@ fun ShopListDetailsScreen(
     navController: NavController,
     shopList: ShopList,
     vm: ProductsViewModel,
-    state: ProductsState) {
+    state: ProductsInListState) {
     Scaffold(
         topBar = { MainTopAppBar(navController = navController, title = shopList.title, goBack = true) },
         floatingActionButton = {
@@ -53,7 +55,7 @@ fun ShopListDetailsScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             Surface (
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier
                     .padding(innerPadding)
                     .weight(0.25F)
@@ -63,13 +65,24 @@ fun ShopListDetailsScreen(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(shopList.date)
+                    Column(
+                        modifier = Modifier.padding(20.dp).weight(0.60F),
+                        horizontalAlignment = Alignment.Start
+
+                    ) {
+                        Text(text = "${stringResource(R.string.title_generic)} : ${shopList.title}",
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1)
+                        Text(text = "${stringResource(R.string.date_generic)} : ${shopList.date}",
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1)
+                    }
                     Button(
                         onClick = {},
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp).weight(0.40F),
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(),
-                        elevation = ButtonDefaults.buttonElevation(12.dp),
+                        elevation = ButtonDefaults.buttonElevation(3.dp),
                     ) {
                         Text("Start")
                         Icon(Icons.Filled.PlayArrow, "Start")
@@ -77,10 +90,10 @@ fun ShopListDetailsScreen(
                 }
             }
             LazyProductColumn(
-                modifier = Modifier.weight(0.75F),
+                modifier = Modifier.padding(horizontal = 12.dp).weight(0.75F),
                 navController = navController,
                 shopList = shopList,
-                state = state,
+                products = state.products,
                 vm = vm,
                 showFavorites = true
             )

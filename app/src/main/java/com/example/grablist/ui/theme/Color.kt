@@ -25,18 +25,14 @@ val IconAccentDark = Color(0xFFFFB74D)
 //LightTheme
 val BluePrimary = Color(0xFF3F51B5)
 val BlueSecondary = Color(0xFF536DFE)
-val AccentOrange = Color(0xFFFFA000)
-val AccentGreen = Color(0xFF4CAF50)
+val BlueTertiary = Color(0xFF5F98EE)
 
-val BackgroundLight = Color(0xFFF5F5F5)
-val SurfaceBackground = Color(0xFFF6E9DD)
+val BackgroundLight = Color(0xFFF5F9FF)
+val SurfaceBackground = Color(0xFFFFF9F2)
 
-val TextPrimary = Color(0xFF212121)
-val TextSecondary = Color(0xFF757575)
-val TextOnLightBackground = Color(0xFFFFFFFF)
+val TextPrimary = Color(0xFFFFFFFF)
+val TextSecondary = Color(0xFF333333)
+val TextTertiary = Color(0xFF000000)
 
 val ErrorRed = Color(0xFFD32F2F)
 val DisabledGrey = Color(0xFFBDBDBD)
-
-val IconPrimary = Color(0xFF3F51B5)
-val IconAccent = Color(0xFFFFA000)

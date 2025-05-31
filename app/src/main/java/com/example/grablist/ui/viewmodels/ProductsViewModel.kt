@@ -18,7 +18,7 @@ class ProductsViewModel(
     val state = repository.products.map { ProductState(products = it) }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = ShopListState(emptyList())
+        initialValue = ProductState(emptyList())
     )
 
     fun addProduct(product: Product) = viewModelScope.launch {
@@ -32,4 +32,14 @@ class ProductsViewModel(
     fun addProductAndReference(product: Product, shopList: ShopList) = viewModelScope.launch {
         repository.addProductAndReference(product, shopList)
     }
+
+    fun changeFavorite(product: Product) = viewModelScope.launch {
+        repository.changeFavoriteProduct(product)
+    }
+
+    val favorites = repository.getFavoriteProducts().map { ProductState(products = it) }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = ProductState(emptyList())
+    )
 }

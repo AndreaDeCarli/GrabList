@@ -8,16 +8,16 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-data class ProductsState(val products: List<Product>)
+data class ProductsInListState(val products: List<Product>)
 
 class ProductsInShopListViewModel(
     private val shopListId: Long,
     private val repository: ShopListRepository): ViewModel()
 {
-    val state = repository.getProductsByShopListId(shopListId).map { ProductsState(products = it) }.stateIn(
+    val state = repository.getProductsByShopListId(shopListId).map { ProductsInListState(products = it) }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = ProductsState(emptyList())
+        initialValue = ProductsInListState(emptyList())
     )
 
 

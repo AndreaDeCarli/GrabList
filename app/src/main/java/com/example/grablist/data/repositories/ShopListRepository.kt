@@ -51,6 +51,10 @@ class ShopListRepository(
         return productDao.getProductsByListId(id)
     }
 
+    fun getFavoriteProducts() : Flow<List<Product>>{
+        return productDao.getFavorites()
+    }
+
     suspend fun deleteProductFromList(product: Product, shopList: ShopList){
         if (!product.favorite) {
             productDao.delete(product)

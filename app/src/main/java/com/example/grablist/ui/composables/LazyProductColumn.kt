@@ -3,7 +3,6 @@ package com.example.grablist.ui.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +23,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,29 +35,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.grablist.R
 import com.example.grablist.data.database.Product
 import com.example.grablist.data.database.ShopList
-import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
-import com.example.grablist.ui.viewmodels.ProductsState
+import com.example.grablist.ui.viewmodels.ProductsInListState
 import com.example.grablist.ui.viewmodels.ProductsViewModel
 
 @Composable
 fun LazyProductColumn(
     navController: NavController,
     showFavorites: Boolean = false,
-    state: ProductsState,
-    shopList: ShopList,
+    products: List<Product>,
+    shopList: ShopList?,
     vm: ProductsViewModel,
     modifier: Modifier = Modifier
 ) {
-    val products = state.products
+
     LazyColumn(modifier = modifier.fillMaxSize()) {
         if (products.isNotEmpty()){
-            items(state.products) {item ->
+            items(products) {item ->
                 ProductCard(
                     product = item,
                     vm = vm,
@@ -71,7 +72,7 @@ fun LazyProductColumn(
 fun ProductCard(
     product: Product,
     vm: ProductsViewModel,
-    shopList: ShopList,
+    shopList: ShopList?,
     showFavorites: Boolean){
     var expanded by remember { mutableStateOf(false) }
     Card(
@@ -129,26 +130,54 @@ fun ProductCard(
             }
 
             Box(modifier = Modifier.weight(0.1F)) {
-                IconButton(
-                    onClick = { expanded = !expanded },
-                    modifier = Modifier
-                        .padding(horizontal = 3.dp, vertical = 12.dp),
-                    colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                ) {
-                    Icon(Icons.Filled.MoreVert, "More")
+                if (shopList != null){
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                        modifier = Modifier
+                            .padding(horizontal = 3.dp, vertical = 12.dp),
+                        colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                    ) {
+                        Icon(Icons.Filled.MoreVert, "More")
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.remove_generic)) },
+                            onClick = {
+                                vm.deleteProduct(product, shopList)
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Favorite") },
+                            onClick = {
+                                vm.changeFavorite(product)
+                                expanded = false
+                            }
+                        )
+                    }
                 }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Remove") },
-                        onClick = {
-                            vm.deleteProduct(product, shopList)
-                            expanded = false
-                        }
-                    )
+                else{
+                    IconToggleButton(
+                        modifier = Modifier
+                            .padding(horizontal = 3.dp, vertical = 12.dp),
+                        colors = IconToggleButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.primary,
+                            disabledContentColor = MaterialTheme.colorScheme.onSecondary,
+                            checkedContainerColor = MaterialTheme.colorScheme.secondary,
+                            checkedContentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        checked = product.favorite,
+                        onCheckedChange = { vm.changeFavorite(product) },
+                    ) {
+                        Icon(Icons.Filled.Favorite, "fav")
+                    }
                 }
+
             }
         }
     }

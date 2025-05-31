@@ -39,26 +39,22 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = BluePrimary,
-    onPrimary = Color.White,
+    onPrimary = TextPrimary,
 
     secondary = BlueSecondary,
     onSecondary = Color.White,
 
+    tertiary = BlueTertiary,
+    onTertiary = TextPrimary,
+
     background = BackgroundLight,
-    onBackground = TextPrimary,
+    onBackground = TextSecondary,
 
     surface = SurfaceBackground,
-    onSurface = TextPrimary,
+    onSurface = TextSecondary,
 
     error = ErrorRed,
     onError = Color.White,
-
-    surfaceVariant = SurfaceBackground,
-    onSurfaceVariant = TextPrimary,
-    outline = DisabledGrey,
-
-    onTertiary = DisabledGrey,
-    onPrimaryContainer = IconAccent
 )
 
 @Composable

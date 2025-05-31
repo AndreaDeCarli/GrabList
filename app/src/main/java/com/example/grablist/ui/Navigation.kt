@@ -55,7 +55,8 @@ fun GrabListNavGraph(navController: NavHostController) {
 
         }
         composable<NavRoute.Favorites> {
-            Favorites(navController)
+            Favorites(navController = navController,
+                vm = productVm)
         }
         composable<NavRoute.Profile> {
             Profile(navController)

@@ -8,4 +8,5 @@
     <string name="settings_title">Settings</string>
     <string name="title_generic">Title</string>
     <string name="date_generic">Date</string>
+    <string name="remove_generic">Remove</string>
 </resources>
