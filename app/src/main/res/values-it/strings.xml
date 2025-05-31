@@ -9,4 +9,6 @@
     <string name="title_generic">Titolo</string>
     <string name="date_generic">Data</string>
     <string name="remove_generic">Rimuovi</string>
+    <string name="start">Avvia</string>
+    <string name="select_favorite">Aggiungi Preferito</string>
 </resources>

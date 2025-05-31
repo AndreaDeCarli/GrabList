@@ -1,5 +1,6 @@
 package com.example.grablist.ui.composables
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -15,7 +16,8 @@ fun AddNewShopListButton(navController: NavController){
     FloatingActionButton(
         onClick = { navController.navigate(NavRoute.AddNewList) },
         containerColor = MaterialTheme.colorScheme.surface,
-        elevation = FloatingActionButtonDefaults.elevation()
+        elevation = FloatingActionButtonDefaults.elevation(),
+        shape = CircleShape
     ) {
         Icon(Icons.Filled.Add, "Add")
     }

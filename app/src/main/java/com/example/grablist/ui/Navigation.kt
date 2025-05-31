@@ -74,7 +74,6 @@ fun GrabListNavGraph(navController: NavHostController) {
 
         composable<NavRoute.AddNewProduct> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
-            val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
 
             val addProductVm = koinViewModel<AddNewProductViewModel>()
             val state by addProductVm.state.collectAsStateWithLifecycle()
@@ -82,7 +81,13 @@ fun GrabListNavGraph(navController: NavHostController) {
                 state,
                 addProductVm.actions,
                 onSubmit = {
-                    productVm.addProductAndReference(state.toProduct(), shopList)},
+                    if (route.id != -1L){
+                        val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
+                        productVm.addProductAndReference(state.toProduct(), shopList)
+                    }else{
+                        productVm.addProduct(state.toProduct())
+                    }
+                           },
                 navController
             )
         }

@@ -1,9 +1,11 @@
 package com.example.grablist.ui.composables
 
+import android.content.ClipData.Item
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,7 +67,9 @@ fun LazyProductColumn(
                     showFavorites = showFavorites)
             }
         }
+        item { Spacer(modifier = Modifier.height(75.dp)) }
     }
+
 }
 
 @Composable
@@ -109,6 +113,7 @@ fun ProductCard(
                 )
             }
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .weight(0.65F)
@@ -116,15 +121,15 @@ fun ProductCard(
                 Text(
                     text = product.name,
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(5.dp),
+                    modifier = Modifier.padding(5.dp).weight(0.75F),
                     color = MaterialTheme.colorScheme.onSecondary
                 )
                 if (showFavorites){
                     if (product.favorite){
-                        Icon(Icons.Filled.Favorite, "Favorite")
+                        Icon(Icons.Filled.Favorite, "Favorite", modifier = Modifier.weight(0.25F))
                     }
                     else{
-                        Icon(Icons.Outlined.FavoriteBorder, "FavoriteEmpty")
+                        Icon(Icons.Outlined.FavoriteBorder, "FavoriteEmpty",  modifier = Modifier.weight(0.25F))
                     }
                 }
             }

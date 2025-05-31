@@ -1,6 +1,11 @@
 package com.example.grablist.ui.screens
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -11,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.grablist.R
+import com.example.grablist.ui.NavRoute
 import com.example.grablist.ui.composables.LazyProductColumn
 import com.example.grablist.ui.composables.MainBottomAppBar
 import com.example.grablist.ui.composables.MainTopAppBar
@@ -26,7 +32,14 @@ fun Favorites(navController: NavController, vm: ProductsViewModel){
         bottomBar = { MainBottomAppBar(
             navController = navController,
             active = 2
-        ) }
+        ) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(NavRoute.AddNewProduct(-1L)) },
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = CircleShape
+            ) { Icon(Icons.Filled.Add, "Add") }
+        }
     ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),

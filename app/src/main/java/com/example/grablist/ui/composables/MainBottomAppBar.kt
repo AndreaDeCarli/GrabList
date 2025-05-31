@@ -23,7 +23,7 @@ fun MainBottomAppBar(navController: NavController, active: Int){
     val colors = NavigationBarItemColors(
         selectedIconColor = MaterialTheme.colorScheme.onPrimary,
         selectedTextColor = MaterialTheme.colorScheme.onPrimary,
-        selectedIndicatorColor = MaterialTheme.colorScheme.primary,
+        selectedIndicatorColor = MaterialTheme.colorScheme.secondary,
         unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
         unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
         disabledIconColor = MaterialTheme.colorScheme.secondary,

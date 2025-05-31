@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.FloatingActionButton
@@ -32,7 +33,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                 if (!state.canSubmit) return@FloatingActionButton
                 onSubmit()
                 navController.navigateUp()
-            }
+            },
+            shape = CircleShape
         ) {
             Icon(Icons.Outlined.Check, "Add")
         } }
