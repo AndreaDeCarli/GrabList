@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 data class AddShopListState(
     val title: String = "",
     val date: String = "",
+    val iconId: Long = 0
 
     ) {
     val canSubmit get() = title.isNotBlank() && date.isNotBlank()
@@ -17,13 +18,14 @@ data class AddShopListState(
     fun toShopList() = ShopList(
         title = title,
         date = date,
-        iconId = 0,
+        iconId = iconId,
     )
 }
 
 interface AddShopListActions {
     fun setTitle(title: String)
     fun setDate(date: String)
+    fun setIcon(id: Long)
 
 }
 
@@ -37,5 +39,8 @@ class AddShopListViewModel : ViewModel() {
 
         override fun setDate(date: String) =
             _state.update { it.copy(date = date) }
+
+        override fun setIcon(id: Long) =
+            _state.update { it.copy(iconId = id) }
     }
 }

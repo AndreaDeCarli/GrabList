@@ -80,7 +80,7 @@ fun ShopListDetailsScreen(
                             navController.navigate(NavRoute.AddNewProduct(shopList.shopListId))
                         }
                     )
-                    HorizontalDivider()
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground)
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.select_favorite)) },
                         leadingIcon = { Icon(Icons.Filled.Favorite, "Favorite") },
@@ -138,7 +138,8 @@ fun ShopListDetailsScreen(
             LazyProductColumn(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
-                    .weight(0.75F),
+                    .weight(0.75F)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 navController = navController,
                 shopList = shopList,
                 products = state.products,

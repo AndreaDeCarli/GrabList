@@ -16,6 +16,7 @@ fun AddNewShopListButton(navController: NavController){
     FloatingActionButton(
         onClick = { navController.navigate(NavRoute.AddNewList) },
         containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onBackground,
         elevation = FloatingActionButtonDefaults.elevation(),
         shape = CircleShape
     ) {

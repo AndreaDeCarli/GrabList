@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -92,9 +93,8 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                 contentAlignment = Alignment.Center,
             ){
                 Image(
-                    Icons.Outlined.Image,
+                    painterResource(item.iconId.toInt()),
                     "List picture",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.background)
                         .fillMaxSize()

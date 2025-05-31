@@ -36,7 +36,7 @@ fun HomeScreen (navController: NavController, viewModel: ShopListViewModel, stat
     ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             LazyShopListColumn(
                 state = state,

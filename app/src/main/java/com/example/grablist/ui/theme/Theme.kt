@@ -55,6 +55,8 @@ private val LightColorScheme = lightColorScheme(
 
     error = ErrorRed,
     onError = Color.White,
+
+    surfaceVariant = SurfaceVariant,
 )
 
 @Composable

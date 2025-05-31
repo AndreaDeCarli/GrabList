@@ -37,13 +37,13 @@ fun Favorites(navController: NavController, vm: ProductsViewModel){
             FloatingActionButton(
                 onClick = { navController.navigate(NavRoute.AddNewProduct(-1L)) },
                 containerColor = MaterialTheme.colorScheme.surface,
-                shape = CircleShape
+                shape = CircleShape,
             ) { Icon(Icons.Filled.Add, "Add") }
         }
     ) { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding),
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             val productsFavorites by vm.favorites.collectAsStateWithLifecycle()
             LazyProductColumn(
