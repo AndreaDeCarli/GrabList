@@ -77,7 +77,7 @@ fun ShopListDetailsScreen(
                         leadingIcon = { Icon(Icons.Filled.ShoppingCart, "Shop") },
                         onClick = {
                             expanded = false
-                            navController.navigate(NavRoute.AddNewProduct(shopList.shopListId))
+                            navController.navigate(NavRoute.AddNewProduct(shopList.shopListId, false))
                         }
                     )
                     HorizontalDivider(color = MaterialTheme.colorScheme.onBackground)
@@ -86,6 +86,7 @@ fun ShopListDetailsScreen(
                         leadingIcon = { Icon(Icons.Filled.Favorite, "Favorite") },
                         onClick = {
                             expanded = false
+                            navController.navigate(NavRoute.ChooseFavProduct(shopList.shopListId))
                         }
                     )
                 }
@@ -140,7 +141,7 @@ fun ShopListDetailsScreen(
                     .padding(horizontal = 5.dp)
                     .weight(0.75F)
                     .background(MaterialTheme.colorScheme.background),
-                navController = navController,
+                onClick = { product -> navController.navigate(NavRoute.ProductDetails(product.productId)) },
                 shopList = shopList,
                 products = state.products,
                 vm = vm,

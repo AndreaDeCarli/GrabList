@@ -25,7 +25,7 @@ import coil.request.ImageRequest
 enum class Size { Sm, Lg }
 
 @Composable
-fun ImageWithPlaceholder(uri: Uri?, size: Size) {
+fun ImageWithPlaceholder(uri: Uri?) {
     if (uri?.path?.isNotEmpty() == true) {
         AsyncImage(
             ImageRequest.Builder(LocalContext.current)

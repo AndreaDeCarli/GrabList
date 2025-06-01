@@ -13,7 +13,7 @@ data class AddShopListState(
     val iconId: Long = 0
 
     ) {
-    val canSubmit get() = title.isNotBlank() && date.isNotBlank()
+    val canSubmit get() = title.isNotBlank() && iconId != 0L
 
     fun toShopList() = ShopList(
         title = title,

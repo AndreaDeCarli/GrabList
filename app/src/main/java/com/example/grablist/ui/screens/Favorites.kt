@@ -35,7 +35,7 @@ fun Favorites(navController: NavController, vm: ProductsViewModel){
         ) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(NavRoute.AddNewProduct(-1L)) },
+                onClick = { navController.navigate(NavRoute.AddNewProduct(-1L, true)) },
                 containerColor = MaterialTheme.colorScheme.surface,
                 shape = CircleShape,
             ) { Icon(Icons.Filled.Add, "Add") }
@@ -47,7 +47,7 @@ fun Favorites(navController: NavController, vm: ProductsViewModel){
         ) {
             val productsFavorites by vm.favorites.collectAsStateWithLifecycle()
             LazyProductColumn(
-                navController = navController,
+                onClick = { product -> navController.navigate(NavRoute.ProductDetails(product.productId)) },
                 products = productsFavorites.products,
                 shopList = null,
                 vm = vm

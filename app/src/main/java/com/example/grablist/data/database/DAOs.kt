@@ -48,8 +48,8 @@ interface CrossRefDao{
     @Query("SELECT * FROM crossRef")
     fun getAll(): Flow<List<CrossRef>>
 
-    @Insert
-    suspend fun insert(crossRef: CrossRef)
+    @Upsert
+    suspend fun upsert(crossRef: CrossRef)
 
     @Delete
     suspend fun delete(crossRef: CrossRef)

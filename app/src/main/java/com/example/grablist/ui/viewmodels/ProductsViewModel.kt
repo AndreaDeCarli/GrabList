@@ -25,6 +25,10 @@ class ProductsViewModel(
         repository.addProduct(product)
     }
 
+    fun addReference(product: Product, shopList: ShopList) = viewModelScope.launch {
+        repository.addReference(product, shopList)
+    }
+
     fun deleteProduct(product: Product, shopList: ShopList) = viewModelScope.launch {
         repository.deleteProductFromList(shopList = shopList, product = product)
     }

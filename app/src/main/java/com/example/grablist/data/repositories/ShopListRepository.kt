@@ -76,8 +76,11 @@ class ShopListRepository(
     suspend fun addProductAndReference(product: Product, shopList: ShopList){
         val id = productDao.upsert(product)
         val shopListId = shopList.shopListId
-        crossRefDao.insert(CrossRef(shopListId, id))
+        crossRefDao.upsert(CrossRef(shopListId, id))
     }
 
+    suspend fun addReference(product: Product, shopList: ShopList){
+        crossRefDao.upsert(CrossRef(shopList.shopListId, product.productId))
+    }
 
 }

@@ -9,8 +9,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.grablist.ui.screens.AddNewList
 import com.example.grablist.ui.screens.AddNewProduct
+import com.example.grablist.ui.screens.ChooseFavoriteScreen
 import com.example.grablist.ui.screens.Favorites
 import com.example.grablist.ui.screens.HomeScreen
+import com.example.grablist.ui.screens.ProductDetailsScreen
 import com.example.grablist.ui.screens.Profile
 import com.example.grablist.ui.screens.ShopListDetailsScreen
 import com.example.grablist.ui.viewmodels.AddNewProductViewModel
@@ -27,8 +29,10 @@ sealed interface NavRoute {
     @Serializable data object Favorites : NavRoute
     @Serializable data object Profile : NavRoute
     @Serializable data object AddNewList : NavRoute
-    @Serializable data class AddNewProduct(val id: Long) : NavRoute
+    @Serializable data class AddNewProduct(val id: Long, val lockFavorite: Boolean) : NavRoute
     @Serializable data class ShopListDetails(val id: Long) : NavRoute
+    @Serializable data class ProductDetails(val id: Long) : NavRoute
+    @Serializable data class ChooseFavProduct(val id: Long) : NavRoute
 }
 
 @Composable
@@ -37,6 +41,7 @@ fun GrabListNavGraph(navController: NavHostController) {
     val shopListState by shopListVm.state.collectAsStateWithLifecycle()
 
     val productVm = koinViewModel<ProductsViewModel>()
+    val productState by productVm.state.collectAsStateWithLifecycle()
 
     NavHost(navController = navController,
         startDestination = NavRoute.HomeScreen
@@ -52,7 +57,12 @@ fun GrabListNavGraph(navController: NavHostController) {
             val state by productsInListVm.state.collectAsStateWithLifecycle()
 
             ShopListDetailsScreen(navController = navController, shopList = shopList, state = state, vm = productVm)
+        }
+        composable<NavRoute.ProductDetails> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.ProductDetails>()
+            val product = requireNotNull(productState.products.find { it.productId == route.id })
 
+            ProductDetailsScreen(navController = navController, product = product)
         }
         composable<NavRoute.Favorites> {
             Favorites(navController = navController,
@@ -73,7 +83,7 @@ fun GrabListNavGraph(navController: NavHostController) {
         }
 
         composable<NavRoute.AddNewProduct> { backStackEntry ->
-            val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
+            val route = backStackEntry.toRoute<NavRoute.AddNewProduct>()
 
             val addProductVm = koinViewModel<AddNewProductViewModel>()
             val state by addProductVm.state.collectAsStateWithLifecycle()
@@ -88,7 +98,17 @@ fun GrabListNavGraph(navController: NavHostController) {
                         productVm.addProduct(state.toProduct())
                     }
                            },
-                navController
+                navController = navController,
+                lockFavorites = route.lockFavorite
+            )
+        }
+        composable<NavRoute.ChooseFavProduct> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
+            val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
+            ChooseFavoriteScreen(
+                navController = navController,
+                vm = productVm,
+                shopList = shopList
             )
         }
     }
