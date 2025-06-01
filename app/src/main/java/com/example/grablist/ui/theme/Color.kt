@@ -27,10 +27,10 @@ val BluePrimary = Color(0xFF3F51B5)
 val BlueSecondary = Color(0xFF536DFE)
 val BlueTertiary = Color(0xFF5F98EE)
 
-val BackgroundLight = Color(0xFFF6FFFF)
+val BackgroundLight = Color(0xFFFFF9F2)
 val SurfaceBackground = Color(0xFFFFC7AF)
 
-val SurfaceVariant = Color(0xFFFFF9F2)
+val SurfaceVariant = Color(0xFFE9E9FF)
 val onSurfaceVariant = Color(0xFF563030)
 
 val TextPrimary = Color(0xFFFFFFFF)

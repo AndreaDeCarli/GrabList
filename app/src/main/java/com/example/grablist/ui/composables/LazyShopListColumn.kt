@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.grablist.R
 import com.example.grablist.data.database.ShopList
 import com.example.grablist.ui.NavRoute
 import com.example.grablist.ui.viewmodels.ShopListState
@@ -92,12 +93,12 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                     .weight(0.25F),
                 contentAlignment = Alignment.Center,
             ){
-                Image(
-                    painterResource(item.iconId.toInt()),
-                    "List picture",
+                Image( painter = painterResource(item.iconId.toInt()),
+                    contentDescription = "List picture",
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                         .fillMaxSize()
+                        .padding(5.dp)
                 )
             }
             Column (

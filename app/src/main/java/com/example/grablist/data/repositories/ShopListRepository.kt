@@ -39,12 +39,17 @@ class ShopListRepository(
 
     suspend fun changeFavoriteProduct(product: Product) {
         val productToChange = productDao.getProductById(product.productId).first()
-        val newProduct = Product(
-            productId = productToChange.productId,
-            name = productToChange.name,
-            imageUri = productToChange.imageUri,
-            favorite = !productToChange.favorite)
-        productDao.upsert(newProduct)
+        val references = crossRefDao.getListsFromProduct(productToChange.productId).first()
+        if (references.isEmpty() && productToChange.favorite){
+            productDao.delete(productToChange)
+        }else{
+            val newProduct = Product(
+                productId = productToChange.productId,
+                name = productToChange.name,
+                imageUri = productToChange.imageUri,
+                favorite = !productToChange.favorite)
+            productDao.upsert(newProduct)
+        }
     }
 
     fun getProductsByShopListId(id: Long) : Flow<List<Product>>{

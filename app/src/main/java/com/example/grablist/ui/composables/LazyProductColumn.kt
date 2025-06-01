@@ -1,6 +1,7 @@
 package com.example.grablist.ui.composables
 
 import android.content.ClipData.Item
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Product
@@ -103,14 +105,8 @@ fun ProductCard(
                     .weight(0.25F),
                 contentAlignment = Alignment.Center,
             ) {
-                Image(
-                    Icons.Outlined.Image,
-                    "List picture",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
-                        .fillMaxSize()
-                )
+                val imageUri = Uri.parse(product.imageUri)
+                ImageWithPlaceholder(imageUri, Size.Sm)
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,

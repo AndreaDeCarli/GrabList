@@ -139,7 +139,7 @@ fun ShopListDetailsScreen(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .weight(0.75F)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(MaterialTheme.colorScheme.background),
                 navController = navController,
                 shopList = shopList,
                 products = state.products,

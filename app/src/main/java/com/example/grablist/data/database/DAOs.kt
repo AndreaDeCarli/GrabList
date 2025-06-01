@@ -56,4 +56,7 @@ interface CrossRefDao{
 
     @Query("SELECT * FROM crossref WHERE shopListId = :id")
     fun getCrossRefById(id: Long): Flow<List<CrossRef>>
+
+    @Query("SELECT * FROM crossref WHERE productId = :id")
+    fun getListsFromProduct(id: Long): Flow<List<CrossRef>>
 }

@@ -61,7 +61,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
         } }
     ) { innerPadding ->
         Column (
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier.fillMaxSize().padding(innerPadding).background(MaterialTheme.colorScheme.background)
         ) {
             OutlinedTextField(
                 onValueChange = actions::setTitle,

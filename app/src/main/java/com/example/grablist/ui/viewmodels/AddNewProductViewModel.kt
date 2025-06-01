@@ -1,5 +1,6 @@
 package com.example.grablist.ui.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.grablist.data.database.Product
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.update
 
 data class AddProductState(
     val name: String = "",
-    val imageUri: String = "",
+    val imageUri: Uri = Uri.EMPTY,
     val favorite: Boolean = false
 
     ) {
@@ -16,7 +17,7 @@ data class AddProductState(
 
     fun toProduct() = Product(
         name = name,
-        imageUri = imageUri,
+        imageUri = imageUri.toString(),
         favorite = favorite,
     )
 }
@@ -24,7 +25,7 @@ data class AddProductState(
 interface AddProductActions {
     fun setName(name: String)
     fun setFavorite(fav: Boolean)
-
+    fun setImageUri(uri: Uri)
 }
 
 class AddNewProductViewModel : ViewModel() {
@@ -37,5 +38,9 @@ class AddNewProductViewModel : ViewModel() {
 
         override fun setFavorite(fav: Boolean) =
             _state.update { it.copy(favorite = fav) }
+
+        override fun setImageUri(uri: Uri) {
+            _state.update { it.copy(imageUri = uri) }
+        }
     }
 }
