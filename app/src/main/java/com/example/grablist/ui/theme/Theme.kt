@@ -14,10 +14,13 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = BluePrimaryDark,
-    onPrimary = Color.Black,
+    onPrimary = TextPrimaryDark,
 
     secondary = BlueSecondaryDark,
-    onSecondary = Color.Black,
+    onSecondary = TextPrimaryDark,
+
+    tertiary = BlueTertiaryDark,
+    onTertiary = TextPrimaryDark,
 
     background = BackgroundDark,
     onBackground = TextPrimaryDark,
@@ -25,15 +28,10 @@ private val DarkColorScheme = darkColorScheme(
     surface = SurfaceDark,
     onSurface = TextPrimaryDark,
 
-    error = ErrorRedDark,
-    onError = Color.Black,
+    error = ErrorRed,
+    onError = TextPrimaryDark,
 
-    surfaceVariant = SurfaceDark,
-    onSurfaceVariant = TextPrimaryDark,
-    outline = DisabledGreyDark,
-
-    onTertiary = DisabledGreyDark,
-    onPrimaryContainer = IconAccentDark
+    surfaceVariant = SurfaceVariantDark,
 
 )
 

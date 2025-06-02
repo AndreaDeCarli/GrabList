@@ -14,11 +14,14 @@ import com.example.grablist.ui.screens.Favorites
 import com.example.grablist.ui.screens.HomeScreen
 import com.example.grablist.ui.screens.ProductDetailsScreen
 import com.example.grablist.ui.screens.Profile
+import com.example.grablist.ui.screens.SettingsScreen
 import com.example.grablist.ui.screens.ShopListDetailsScreen
 import com.example.grablist.ui.viewmodels.AddNewProductViewModel
 import com.example.grablist.ui.viewmodels.AddShopListViewModel
 import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
 import com.example.grablist.ui.viewmodels.ProductsViewModel
+import com.example.grablist.ui.viewmodels.SettingsState
+import com.example.grablist.ui.viewmodels.SettingsViewModel
 import com.example.grablist.ui.viewmodels.ShopListViewModel
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
@@ -29,6 +32,7 @@ sealed interface NavRoute {
     @Serializable data object Favorites : NavRoute
     @Serializable data object Profile : NavRoute
     @Serializable data object AddNewList : NavRoute
+    @Serializable data object Settings : NavRoute
     @Serializable data class AddNewProduct(val id: Long, val lockFavorite: Boolean) : NavRoute
     @Serializable data class ShopListDetails(val id: Long) : NavRoute
     @Serializable data class ProductDetails(val id: Long) : NavRoute
@@ -36,7 +40,7 @@ sealed interface NavRoute {
 }
 
 @Composable
-fun GrabListNavGraph(navController: NavHostController) {
+fun GrabListNavGraph(navController: NavHostController, settingsViewModel: SettingsViewModel, settingsState: SettingsState) {
     val shopListVm = koinViewModel<ShopListViewModel>()
     val shopListState by shopListVm.state.collectAsStateWithLifecycle()
 
@@ -110,6 +114,10 @@ fun GrabListNavGraph(navController: NavHostController) {
                 vm = productVm,
                 shopList = shopList
             )
+        }
+
+        composable<NavRoute.Settings> {
+            SettingsScreen(navController, settingsState, settingsViewModel)
         }
     }
 }

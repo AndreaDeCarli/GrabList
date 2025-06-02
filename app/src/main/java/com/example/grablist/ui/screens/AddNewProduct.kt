@@ -54,8 +54,7 @@ fun AddNewProduct (
     val ctx = LocalContext.current
     val cameraLauncher = rememberCameraLauncher(
         onPictureTaken = {
-            imageUri -> actions.setImageUri(imageUri)
-            saveImageToStorage(imageUri,ctx.contentResolver)
+            imageUri -> actions.setImageUri(saveImageToStorage(imageUri,ctx.contentResolver))
         }
     )
     if (lockFavorites){
