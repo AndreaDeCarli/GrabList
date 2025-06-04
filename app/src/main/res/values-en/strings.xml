@@ -15,4 +15,8 @@
     <string name="take_pic">Take a Picture</string>
     <string name="select_date">Select Date</string>
     <string name="select_pic">Select Picture</string>
+    <string name="delete_shoplist_dialog_text">This list will be permanently deleted from the app. Proceed?</string>
+    <string name="delete_shoplist_dialog_title">Delete List</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

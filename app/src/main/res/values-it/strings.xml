@@ -15,4 +15,8 @@
     <string name="take_pic">Scatta una Foto</string>
     <string name="select_date">Seleziona Data</string>
     <string name="select_pic">Seleziona Immagine</string>
+    <string name="delete_shoplist_dialog_text">Questa lista sarà eliminata definitivamente dalla app. Procedere?</string>
+    <string name="delete_shoplist_dialog_title">Elimina Lista</string>
+    <string name="confirm">Conferma</string>
+    <string name="dismiss">Annulla</string>
 </resources>

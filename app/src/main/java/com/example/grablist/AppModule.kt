@@ -1,6 +1,7 @@
 package com.example.grablist
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.grablist.data.database.CrossRefDao
@@ -36,7 +37,8 @@ val appModule = module {
         ShopListRepository(
             get<ShopListDatabase>().shopListDAO(),
             get<ShopListDatabase>().productDAO(),
-            get<ShopListDatabase>().crossRefDAO()
+            get<ShopListDatabase>().crossRefDAO(),
+            get<Context>()
         )
     }
 

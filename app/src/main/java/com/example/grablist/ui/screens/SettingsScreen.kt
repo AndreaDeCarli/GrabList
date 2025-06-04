@@ -50,7 +50,8 @@ fun SettingsScreen(
                 onClick = {
                     navController.navigateUp() },
                 shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onBackground
             ) {
                 Icon(Icons.Filled.Check, "Confirm")
             }

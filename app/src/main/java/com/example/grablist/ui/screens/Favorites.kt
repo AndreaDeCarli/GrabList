@@ -37,6 +37,7 @@ fun Favorites(navController: NavController, vm: ProductsViewModel){
             FloatingActionButton(
                 onClick = { navController.navigate(NavRoute.AddNewProduct(-1L, true)) },
                 containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onBackground,
                 shape = CircleShape,
             ) { Icon(Icons.Filled.Add, "Add") }
         }

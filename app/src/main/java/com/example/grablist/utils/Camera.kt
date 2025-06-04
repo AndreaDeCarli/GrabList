@@ -38,7 +38,7 @@ fun rememberCameraLauncher(
             override val capturedImageUri get() = capturedImageUri
             override fun captureImage() {
                 val imageFile = File
-                    .createTempFile("tmp_image", ".jpg", ctx.externalCacheDir)
+                    .createTempFile("tmp_image", ".jpg", ctx.filesDir)
                 imageUri = FileProvider
                     .getUriForFile(ctx, ctx.packageName + ".provider", imageFile)
                 cameraActivityLauncher.launch((imageUri))

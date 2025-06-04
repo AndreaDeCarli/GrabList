@@ -1,18 +1,23 @@
 package com.example.grablist.data.repositories
 
+import android.content.Context
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import com.example.grablist.data.database.CrossRef
 import com.example.grablist.data.database.CrossRefDao
 import com.example.grablist.data.database.Product
 import com.example.grablist.data.database.ProductDao
 import com.example.grablist.data.database.ShopList
 import com.example.grablist.data.database.ShopListDao
+import com.example.grablist.utils.deleteImageFromFiles
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class ShopListRepository(
     private val shopListDao: ShopListDao,
     private val productDao: ProductDao,
-    private val crossRefDao: CrossRefDao
+    private val crossRefDao: CrossRefDao,
+    private val ctx: Context
 ) {
     val shopLists: Flow<List<ShopList>> = shopListDao.getAll()
 
@@ -41,7 +46,7 @@ class ShopListRepository(
         val productToChange = productDao.getProductById(product.productId).first()
         val references = crossRefDao.getListsFromProduct(productToChange.productId).first()
         if (references.isEmpty() && productToChange.favorite){
-            productDao.delete(productToChange)
+            deleteProduct(productToChange)
         }else{
             val newProduct = Product(
                 productId = productToChange.productId,
@@ -62,7 +67,7 @@ class ShopListRepository(
 
     suspend fun deleteProductFromList(product: Product, shopList: ShopList){
         if (!product.favorite) {
-            productDao.delete(product)
+            deleteProduct(product)
         }
         val crossRefToDelete = requireNotNull(
             crossRef.first().find { it.shopListId == shopList.shopListId && it.productId == product.productId })
@@ -83,4 +88,8 @@ class ShopListRepository(
         crossRefDao.upsert(CrossRef(shopList.shopListId, product.productId))
     }
 
+    private suspend fun deleteProduct(product: Product){
+        deleteImageFromFiles(ctx, Uri.parse(product.imageUri))
+        productDao.delete(product)
+    }
 }

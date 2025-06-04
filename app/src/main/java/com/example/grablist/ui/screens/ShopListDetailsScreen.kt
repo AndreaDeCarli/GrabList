@@ -60,7 +60,8 @@ fun ShopListDetailsScreen(
                 onClick = { expanded = !expanded/*navController.navigate(NavRoute.AddNewProduct(shopList.shopListId))*/ },
                 elevation = FloatingActionButtonDefaults.elevation(4.dp),
                 shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onBackground
             ) {
                 if (!expanded){
                     Icon(Icons.Filled.Add, "Add")

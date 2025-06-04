@@ -15,16 +15,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -66,9 +70,11 @@ fun LazyShopListColumn(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    var showAlert by remember { mutableStateOf(false) }
     Card(
         onClick = onClick,
         elevation = CardDefaults.cardElevation(
@@ -132,12 +138,63 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.remove_generic)) },
                         onClick = {
-                            vm.deleteShopList(item)
+                            showAlert = true
                             expanded = false
                         }
                     )
                 }
             }
+            if (showAlert){
+                AlertDialog(
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Delete, contentDescription = "Example Icon",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.delete_shoplist_dialog_title),
+                            color = MaterialTheme.colorScheme.onBackground)
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.delete_shoplist_dialog_text),
+                            color = MaterialTheme.colorScheme.onBackground)
+                    },
+                    onDismissRequest = {
+                        showAlert = false
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { vm.deleteShopList(item) },
+                            colors = ButtonColors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.tertiary,
+                                disabledContainerColor = MaterialTheme.colorScheme.background,
+                                disabledContentColor = MaterialTheme.colorScheme.background
+                            )
+                        ) {
+                            Text(stringResource(R.string.confirm))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { showAlert = false },
+                            colors = ButtonColors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.tertiary,
+                                disabledContainerColor = MaterialTheme.colorScheme.background,
+                                disabledContentColor = MaterialTheme.colorScheme.background
+                            )
+                        ) {
+                            Text(stringResource(R.string.dismiss))
+                        }
+                    },
+                    containerColor = MaterialTheme.colorScheme.background,
+                )
+            }
+
         }
     }
 }

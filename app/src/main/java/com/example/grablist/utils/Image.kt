@@ -54,7 +54,7 @@ fun saveImageToInternalStorage(context: Context, uri: Uri): Uri? {
     return try {
         val inputStream = context.contentResolver.openInputStream(uri)
         val filename = "image_${System.currentTimeMillis()}.jpg"
-        val file = File(context.externalCacheDir, filename)
+        val file = File(context.filesDir, filename)
 
         inputStream.use { input ->
             FileOutputStream(file).use { output ->
@@ -66,5 +66,23 @@ fun saveImageToInternalStorage(context: Context, uri: Uri): Uri? {
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+}
+
+
+fun deleteImageFromFiles(context: Context, uri: Uri): Boolean {
+    return try {
+        val file = File(uri.path ?: return false)
+        if (file.exists()) {
+            file.delete()
+        } else {
+            val filesDir = context.filesDir
+            val fileName = uri.lastPathSegment ?: return false
+            val cachedFile = File(filesDir, fileName)
+            cachedFile.delete()
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
 }
