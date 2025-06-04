@@ -2,6 +2,7 @@ package com.example.grablist.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -41,6 +42,9 @@ sealed interface NavRoute {
 
 @Composable
 fun GrabListNavGraph(navController: NavHostController, settingsViewModel: SettingsViewModel, settingsState: SettingsState) {
+
+    val ctx = LocalContext.current
+
     val shopListVm = koinViewModel<ShopListViewModel>()
     val shopListState by shopListVm.state.collectAsStateWithLifecycle()
 
@@ -103,7 +107,8 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
                     }
                            },
                 navController = navController,
-                lockFavorites = route.lockFavorite
+                lockFavorites = route.lockFavorite,
+                ctx = ctx
             )
         }
         composable<NavRoute.ChooseFavProduct> { backStackEntry ->

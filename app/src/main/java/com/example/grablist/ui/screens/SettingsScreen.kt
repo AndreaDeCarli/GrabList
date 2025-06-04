@@ -40,7 +40,11 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel
 ){
     Scaffold(
-        topBar = { MainTopAppBar(navController = navController, stringResource(R.string.settings_title), goBack = false) },
+        topBar = { MainTopAppBar(
+            navController = navController,
+            title = stringResource(R.string.settings_title),
+            goBack = false,
+            options = false) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -87,7 +91,7 @@ fun SettingsScreen(
                 OutlinedTextField(
                     onValueChange = { settingsViewModel.setUsername(it) },
                     value = state.username,
-                    label = { Text(stringResource(id = R.string.title_generic)) },
+                    label = { Text(stringResource(id = R.string.name_generic)) },
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxWidth())

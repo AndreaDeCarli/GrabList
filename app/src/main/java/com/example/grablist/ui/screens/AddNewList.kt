@@ -124,8 +124,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                         Image(
                             painter = painterResource(imagesIds[it]),
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(90.dp)
+                            modifier = Modifier.padding(horizontal = 6.dp)
+                                .size(85.dp)
                                 .selectable(
                                     selected = selected == it,
                                     onClick = {
@@ -134,9 +134,9 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                                 .border(
                                     3.dp,
                                     MaterialTheme.colorScheme.secondary,
-                                    RoundedCornerShape(20.dp)
+                                    RoundedCornerShape(10.dp)
                                 )
-                                .clip(RoundedCornerShape(20.dp))
+                                .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.tertiary)
                             ,
                             contentDescription = "deca",
@@ -145,8 +145,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                         Image(
                             painter = painterResource(imagesIds[it]),
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(90.dp)
+                            modifier = Modifier.padding(horizontal = 5.dp)
+                                .size(80.dp)
                                 .selectable(
                                     selected = selected == it,
                                     onClick = {

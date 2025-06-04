@@ -16,7 +16,7 @@ import com.example.grablist.ui.NavRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean){
+fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean, options: Boolean = true){
     TopAppBar(
         title = { Text(title) },
         navigationIcon = { if (goBack) {
@@ -31,9 +31,12 @@ fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean){
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         actions = {
-            IconButton( onClick = { navController.navigate(NavRoute.Settings) }) {
-                Icon(Icons.Filled.Settings, "Settings")
+            if (options){
+                IconButton( onClick = { navController.navigate(NavRoute.Settings) }) {
+                    Icon(Icons.Filled.Settings, "Settings")
+                }
             }
+
         }
     )
 }

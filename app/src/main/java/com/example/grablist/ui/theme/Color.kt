@@ -3,11 +3,11 @@ package com.example.grablist.ui.theme
 import androidx.compose.ui.graphics.Color
 
 //DarkTheme
-val BluePrimaryDark = Color(0xFF071241)
-val BlueSecondaryDark = Color(0xFF071F62)
-val BlueTertiaryDark = Color(0xFF18225B)
+val BluePrimaryDark = Color(0xFF18202F)
+val BlueSecondaryDark = Color(0xFF151E3A)
+val BlueTertiaryDark = Color(0xFF192E50)
 
-val BackgroundDark = Color(0xFF000813)
+val BackgroundDark = Color(0xFF0D1117)
 val SurfaceDark = Color(0xFF572321)
 
 val TextPrimaryDark = Color(0xFFFFFFFF)

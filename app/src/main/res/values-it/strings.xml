@@ -14,4 +14,5 @@
     <string name="name_generic">Nome</string>
     <string name="take_pic">Scatta una Foto</string>
     <string name="select_date">Seleziona Data</string>
+    <string name="select_pic">Seleziona Immagine</string>
 </resources>

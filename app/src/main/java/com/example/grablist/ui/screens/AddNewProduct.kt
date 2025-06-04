@@ -1,16 +1,27 @@
 package com.example.grablist.ui.screens
 
+import android.content.ContentValues
+import android.content.Context
+import android.net.Uri
+import android.os.SystemClock
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
@@ -29,10 +40,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.grablist.R
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddProductActions
@@ -40,6 +54,7 @@ import com.example.grablist.ui.viewmodels.AddProductState
 import com.example.grablist.ui.viewmodels.AddShopListActions
 import com.example.grablist.ui.viewmodels.AddShopListState
 import com.example.grablist.utils.rememberCameraLauncher
+import com.example.grablist.utils.saveImageToInternalStorage
 import com.example.grablist.utils.saveImageToStorage
 
 @Composable
@@ -48,15 +63,25 @@ fun AddNewProduct (
     actions: AddProductActions,
     onSubmit: () -> Unit,
     navController: NavController,
-    lockFavorites: Boolean
+    lockFavorites: Boolean,
+    ctx: Context
 ){
 
-    val ctx = LocalContext.current
+
     val cameraLauncher = rememberCameraLauncher(
         onPictureTaken = {
-            imageUri -> actions.setImageUri(saveImageToStorage(imageUri,ctx.contentResolver))
+            imageUri -> actions.setImageUri(saveImageToStorage(imageUri, ctx.contentResolver))
         }
     )
+
+    val launcher = rememberLauncherForActivityResult(
+        contract =
+        ActivityResultContracts.GetContent()
+    ) { imageUri: Uri? ->
+            actions.setImageUri(requireNotNull(saveImageToInternalStorage(ctx, requireNotNull(imageUri))))
+
+    }
+
     if (lockFavorites){
         actions.setFavorite(true)
     }
@@ -91,7 +116,9 @@ fun AddNewProduct (
                     .fillMaxWidth())
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -119,8 +146,8 @@ fun AddNewProduct (
                 }
             }
             Button(
+                modifier = Modifier.padding(vertical = 10.dp),
                 onClick = cameraLauncher::captureImage,
-
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -132,6 +159,25 @@ fun AddNewProduct (
                 Text(stringResource(R.string.take_pic))
                 Icon(Icons.Filled.CameraAlt, "camera")
             }
+
+            Button(
+                modifier = Modifier.padding(vertical = 10.dp),
+                onClick = {
+                    launcher.launch("image/*")
+                },
+                colors = ButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+                    disabledContentColor = MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+
+                Text(stringResource(R.string.select_pic))
+                Icon(Icons.Filled.ImageSearch, "picture")
+            }
+
+
 
         }
     }

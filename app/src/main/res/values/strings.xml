@@ -14,4 +14,5 @@
     <string name="name_generic">Name</string>
     <string name="take_pic">Take a Picture</string>
     <string name="select_date">Select Date</string>
+    <string name="select_pic">Select Picture</string>
 </resources>
