@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -138,10 +139,10 @@ fun AddNewProduct (
                     onCheckedChange = actions::setFavorite,
                     modifier = Modifier.padding(12.dp),
                     colors = IconToggleButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        containerColor = MaterialTheme.colorScheme.background,
                         contentColor = MaterialTheme.colorScheme.onBackground,
-                        disabledContainerColor = MaterialTheme.colorScheme.primary,
-                        disabledContentColor = MaterialTheme.colorScheme.secondary,
+                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        disabledContentColor = MaterialTheme.colorScheme.background,
                         checkedContainerColor = MaterialTheme.colorScheme.primary,
                         checkedContentColor = MaterialTheme.colorScheme.onPrimary
                     )
@@ -156,7 +157,7 @@ fun AddNewProduct (
             }
             Button(
                 enabled = !imageFound,
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = 10.dp).size(width = 220.dp, height = 40.dp),
                 onClick = cameraLauncher::captureImage,
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -165,14 +166,15 @@ fun AddNewProduct (
                     disabledContentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-
-                Text(stringResource(R.string.take_pic))
-                Icon(Icons.Filled.CameraAlt, "camera")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.take_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                    Icon(Icons.Filled.CameraAlt, "camera", modifier = Modifier.weight(0.2F))
+                }
             }
 
             Button(
                 enabled = !imageFound,
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = 10.dp).size(width = 220.dp, height = 40.dp),
                 onClick = {
                     launcher.launch("image/*")
                 },
@@ -183,9 +185,10 @@ fun AddNewProduct (
                     disabledContentColor = MaterialTheme.colorScheme.onSecondary
                 )
             ) {
-
-                Text(stringResource(R.string.select_pic))
-                Icon(Icons.Filled.ImageSearch, "picture")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.select_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                    Icon(Icons.Filled.ImageSearch, "search", modifier = Modifier.weight(0.2F))
+                }
             }
 
             if (imageFound){

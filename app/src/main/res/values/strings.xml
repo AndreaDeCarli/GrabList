@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">GrabList</string>
     <string name="home_title">Shopping Lists</string>
-    <string name="favs_title">Favorites</string>
+    <string name="favs_title">Favorite Products</string>
     <string name="prof_title">Profile</string>
     <string name="new_product_title">Add New Product</string>
     <string name="new_list_title">Add New List</string>

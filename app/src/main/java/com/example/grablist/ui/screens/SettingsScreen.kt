@@ -1,5 +1,6 @@
 package com.example.grablist.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,8 @@ fun SettingsScreen(
     state: SettingsState,
     settingsViewModel: SettingsViewModel
 ){
+    BackHandler {  } /*NO GOING BACK*/
+
     Scaffold(
         topBar = { MainTopAppBar(
             navController = navController,

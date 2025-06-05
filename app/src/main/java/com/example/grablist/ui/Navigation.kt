@@ -57,6 +57,7 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
         composable<NavRoute.HomeScreen> {
             HomeScreen(navController, shopListVm, shopListState)
         }
+
         composable<NavRoute.ShopListDetails> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
             val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
@@ -66,19 +67,26 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
 
             ShopListDetailsScreen(navController = navController, shopList = shopList, state = state, vm = productVm)
         }
+
         composable<NavRoute.ProductDetails> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ProductDetails>()
             val product = requireNotNull(productState.products.find { it.productId == route.id })
 
             ProductDetailsScreen(navController = navController, product = product)
         }
+        
         composable<NavRoute.Favorites> {
             Favorites(navController = navController,
                 vm = productVm)
         }
+
         composable<NavRoute.Profile> {
-            Profile(navController)
+            Profile(navController,
+                settingsState = settingsState,
+                shopListState = shopListState,
+                productVm = productVm)
         }
+
         composable<NavRoute.AddNewList> {
             val addShopListVm = koinViewModel<AddShopListViewModel>()
             val state by addShopListVm.state.collectAsStateWithLifecycle()
@@ -111,6 +119,7 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
                 ctx = ctx
             )
         }
+
         composable<NavRoute.ChooseFavProduct> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
             val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })

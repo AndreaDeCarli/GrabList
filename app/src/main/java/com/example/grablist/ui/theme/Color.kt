@@ -26,6 +26,6 @@ val SurfaceBackground = Color(0xFFFFC7AF)
 val SurfaceVariant = Color(0xFFE9E9FF)
 
 val TextPrimary = Color(0xFFFFFFFF)
-val TextSecondary = Color(0xFF282828)
+val TextSecondary = Color(0xFF212121)
 
 val ErrorRed = Color(0xFFD32F2F)
