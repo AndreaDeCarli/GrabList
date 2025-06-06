@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Product
 import com.example.grablist.data.database.ShopList
+import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.LazyCheckProductsColumn
 import com.example.grablist.ui.viewmodels.ProductState
 import com.example.grablist.ui.viewmodels.ProductsInListState
@@ -61,58 +62,22 @@ fun ActiveShoppingScreen (
         }
     ) { innerPadding ->
         LazyCheckProductsColumn(
+            navController = navController,
             state = state,
             modifier = Modifier.padding(innerPadding))
 
         if (showQuitAlert){
-            AlertDialog(
-                icon = {
-                    Icon(
-                        Icons.AutoMirrored.Outlined.ExitToApp, contentDescription = "Exit",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                    )
-                },
-                title = {
-                    Text(
-                        text = stringResource(R.string.delete_shoplist_dialog_title),
-                        color = MaterialTheme.colorScheme.onBackground)
-                },
-                text = {
-                    Text(
-                        text = stringResource(R.string.delete_shoplist_dialog_text),
-                        color = MaterialTheme.colorScheme.onBackground)
-                },
-                onDismissRequest = {
+            GenericAlertDialog(
+                title = stringResource(R.string.quit_shopping_title),
+                text = stringResource(R.string.quit_shopping_text),
+                confirmText = stringResource(R.string.confirm),
+                confirmAction = {
                     showQuitAlert = false
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = { showQuitAlert = false
-                            navController.navigateUp() },
-                        colors = ButtonColors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                            contentColor = MaterialTheme.colorScheme.tertiary,
-                            disabledContainerColor = MaterialTheme.colorScheme.background,
-                            disabledContentColor = MaterialTheme.colorScheme.background
-                        )
-                    ) {
-                        Text(stringResource(R.string.confirm))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showQuitAlert = false },
-                        colors = ButtonColors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                            contentColor = MaterialTheme.colorScheme.tertiary,
-                            disabledContainerColor = MaterialTheme.colorScheme.background,
-                            disabledContentColor = MaterialTheme.colorScheme.background
-                        )
-                    ) {
-                        Text(stringResource(R.string.dismiss))
-                    }
-                },
-                containerColor = MaterialTheme.colorScheme.background,
+                    navController.navigateUp() },
+                dismissText = stringResource(R.string.dismiss),
+                dismissAction = { showQuitAlert = false },
+                onDismissRequest = { showQuitAlert = false },
+                icon = Icons.AutoMirrored.Outlined.ExitToApp
             )
         }
     }

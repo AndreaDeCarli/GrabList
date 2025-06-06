@@ -71,7 +71,6 @@ fun LazyShopListColumn(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
@@ -146,56 +145,17 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                 }
             }
             if (showAlert){
-                AlertDialog(
-                    icon = {
-                        Icon(
-                            Icons.Outlined.Delete, contentDescription = "Example Icon",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    },
-                    title = {
-                        Text(
-                            text = stringResource(R.string.delete_shoplist_dialog_title),
-                            color = MaterialTheme.colorScheme.onBackground)
-                    },
-                    text = {
-                        Text(
-                            text = stringResource(R.string.delete_shoplist_dialog_text),
-                            color = MaterialTheme.colorScheme.onBackground)
-                    },
-                    onDismissRequest = {
-                        showAlert = false
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = { vm.deleteShopList(item) },
-                            colors = ButtonColors(
-                                containerColor = MaterialTheme.colorScheme.background,
-                                contentColor = MaterialTheme.colorScheme.tertiary,
-                                disabledContainerColor = MaterialTheme.colorScheme.background,
-                                disabledContentColor = MaterialTheme.colorScheme.background
-                            )
-                        ) {
-                            Text(stringResource(R.string.confirm))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { showAlert = false },
-                            colors = ButtonColors(
-                                containerColor = MaterialTheme.colorScheme.background,
-                                contentColor = MaterialTheme.colorScheme.tertiary,
-                                disabledContainerColor = MaterialTheme.colorScheme.background,
-                                disabledContentColor = MaterialTheme.colorScheme.background
-                            )
-                        ) {
-                            Text(stringResource(R.string.dismiss))
-                        }
-                    },
-                    containerColor = MaterialTheme.colorScheme.background,
+                GenericAlertDialog(
+                    title = stringResource(R.string.delete_shoplist_dialog_title),
+                    text = stringResource(R.string.delete_shoplist_dialog_text),
+                    confirmText = stringResource(R.string.confirm),
+                    confirmAction = { vm.deleteShopList(item) },
+                    dismissText = stringResource(R.string.dismiss),
+                    dismissAction = { showAlert = false },
+                    onDismissRequest = { showAlert = false },
+                    icon = Icons.Outlined.Delete
                 )
             }
-
         }
     }
 }

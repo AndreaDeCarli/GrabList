@@ -103,7 +103,7 @@ fun ShopListDetailsScreen(
                 .padding(innerPadding)
         ) {
             Surface (
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .height(100.dp)
                     .fillMaxWidth()
@@ -134,7 +134,7 @@ fun ShopListDetailsScreen(
                             .padding(horizontal = 12.dp, vertical = 7.dp)
                             .weight(0.40F),
                         shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                         elevation = ButtonDefaults.buttonElevation(3.dp),
                     ) {
                         Text(stringResource(R.string.start))
