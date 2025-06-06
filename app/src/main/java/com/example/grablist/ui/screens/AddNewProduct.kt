@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Button
@@ -187,7 +188,7 @@ fun AddNewProduct (
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.select_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
-                    Icon(Icons.Filled.ImageSearch, "search", modifier = Modifier.weight(0.2F))
+                    Icon(Icons.Filled.Upload, "search", modifier = Modifier.weight(0.2F))
                 }
             }
 

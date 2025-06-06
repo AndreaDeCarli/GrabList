@@ -1,10 +1,6 @@
 package com.example.grablist.ui.screens
 
-
-import android.widget.DatePicker
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,10 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,7 +56,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
     Scaffold (
         topBar = { MainTopAppBar(navController, stringResource(id = R.string.new_list_title), true) },
         floatingActionButton = { FloatingActionButton(
-            containerColor = MaterialTheme.colorScheme.tertiary,
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onBackground,
             onClick = {
                 if (!state.canSubmit) return@FloatingActionButton
                 onSubmit()
@@ -109,11 +102,6 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                         actions.setDate(convertMillisToDate(requireNotNull(millis)))
                         showDatePicker = false})
             }
-//            OutlinedTextField(
-//                onValueChange = actions::setDate,
-//                value = state.date,
-//                label = { Text(stringResource(id = R.string.date_generic)) },
-//                modifier = Modifier.padding(12.dp).fillMaxWidth())
 
             var selected by remember { mutableIntStateOf(0) }
             val imagesIds = listOf(R.drawable.sprite_0, R.drawable.sprite_1,R.drawable.sprite_2,R.drawable.sprite_3,R.drawable.sprite_4, R.drawable.sprite_5,R.drawable.sprite_6,R.drawable.sprite_7)
@@ -153,10 +141,11 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                                         selected = it;actions.setIcon(imagesIds[it].toLong())
                                     })
                                 .clip(RoundedCornerShape(20.dp)),
-                            contentDescription = "deca")
+                            contentDescription = "deca"
+                        )
                     }
-                     }
                 }
+            }
         }
     }
 }

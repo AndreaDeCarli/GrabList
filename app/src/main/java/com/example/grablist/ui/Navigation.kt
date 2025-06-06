@@ -1,6 +1,7 @@
 package com.example.grablist.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -8,6 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.grablist.data.database.Product
+import com.example.grablist.ui.screens.ActiveShoppingScreen
 import com.example.grablist.ui.screens.AddNewList
 import com.example.grablist.ui.screens.AddNewProduct
 import com.example.grablist.ui.screens.ChooseFavoriteScreen
@@ -38,6 +41,7 @@ sealed interface NavRoute {
     @Serializable data class ShopListDetails(val id: Long) : NavRoute
     @Serializable data class ProductDetails(val id: Long) : NavRoute
     @Serializable data class ChooseFavProduct(val id: Long) : NavRoute
+    @Serializable data class ActiveShopping(val id: Long) : NavRoute
 }
 
 @Composable
@@ -66,6 +70,16 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
             val state by productsInListVm.state.collectAsStateWithLifecycle()
 
             ShopListDetailsScreen(navController = navController, shopList = shopList, state = state, vm = productVm)
+        }
+
+        composable<NavRoute.ActiveShopping> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.ActiveShopping>()
+            val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
+
+            val productsInListVm: ProductsInShopListViewModel = koinViewModel(parameters = { parametersOf(shopList.shopListId) })
+            val state by productsInListVm.state.collectAsState()
+
+            ActiveShoppingScreen(navController = navController, state = state, shopList)
         }
 
         composable<NavRoute.ProductDetails> { backStackEntry ->

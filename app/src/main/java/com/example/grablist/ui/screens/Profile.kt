@@ -88,7 +88,8 @@ fun ProfileEntry(
     Text(
         text = "${text}: $value",
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp),
-        fontSize = 24.sp
+        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+        fontSize = 20.sp,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }

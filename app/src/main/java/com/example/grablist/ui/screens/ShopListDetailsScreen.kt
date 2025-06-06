@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,7 +77,7 @@ fun ShopListDetailsScreen(
                 ) {
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.new_product_title)) },
-                        leadingIcon = { Icon(Icons.Filled.ShoppingCart, "Shop") },
+                        leadingIcon = { Icon(Icons.Filled.ShoppingCart, "Shop", tint = MaterialTheme.colorScheme.onBackground) },
                         onClick = {
                             expanded = false
                             navController.navigate(NavRoute.AddNewProduct(shopList.shopListId, false))
@@ -84,7 +86,7 @@ fun ShopListDetailsScreen(
                     HorizontalDivider(color = MaterialTheme.colorScheme.onBackground)
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.select_favorite)) },
-                        leadingIcon = { Icon(Icons.Filled.Favorite, "Favorite") },
+                        leadingIcon = { Icon(Icons.Filled.Favorite, "Favorite", tint = MaterialTheme.colorScheme.onBackground) },
                         onClick = {
                             expanded = false
                             navController.navigate(NavRoute.ChooseFavProduct(shopList.shopListId))
@@ -96,13 +98,16 @@ fun ShopListDetailsScreen(
     ) { innerPadding ->
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
             Surface (
                 color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .weight(0.25F)
+                    .height(100.dp)
+                    .fillMaxWidth()
+
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -124,7 +129,7 @@ fun ShopListDetailsScreen(
                             maxLines = 1)
                     }
                     Button(
-                        onClick = {},
+                        onClick = { navController.navigate(NavRoute.ActiveShopping(shopList.shopListId)) },
                         modifier = Modifier
                             .padding(horizontal = 12.dp, vertical = 7.dp)
                             .weight(0.40F),
@@ -140,7 +145,6 @@ fun ShopListDetailsScreen(
             LazyProductColumn(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
-                    .weight(0.75F)
                     .background(MaterialTheme.colorScheme.background),
                 onClick = { product -> navController.navigate(NavRoute.ProductDetails(product.productId)) },
                 shopList = shopList,
