@@ -79,7 +79,11 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
             val productsInListVm: ProductsInShopListViewModel = koinViewModel(parameters = { parametersOf(shopList.shopListId) })
             val state by productsInListVm.state.collectAsState()
 
-            ActiveShoppingScreen(navController = navController, state = state, shopList)
+            ActiveShoppingScreen(
+                navController = navController,
+                state = state,
+                shopList = shopList,
+                settingsViewModel = settingsViewModel)
         }
 
         composable<NavRoute.ProductDetails> { backStackEntry ->

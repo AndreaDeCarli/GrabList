@@ -18,31 +18,48 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class SettingsState(val username: String, val theme: Theme)
+data class SettingsState(val username: String, val theme: Theme, val progress: Int)
 
 class SettingsViewModel(
     private val repository: SettingsRepository
 ) : ViewModel() {
-    var state by mutableStateOf(SettingsState("", Theme.System))
+    var state by mutableStateOf(SettingsState("", Theme.System, 0))
         private set
 
     fun setUsername(username: String) {
-        state = SettingsState(username, state.theme)
+        state = SettingsState(username, state.theme, state.progress)
         viewModelScope.launch {
             repository.setUsername(username)
         }
     }
 
     fun setTheme(theme: Theme) {
-        state = SettingsState(username = state.username, theme = theme)
+        state = SettingsState(username = state.username, theme = theme, progress = state.progress)
         viewModelScope.launch {
             repository.setTheme(theme)
         }
     }
 
+    fun increaseProgress() {
+        state = SettingsState(username = state.username, theme = state.theme, progress = state.progress+1)
+        viewModelScope.launch {
+            repository.increaseProgress()
+        }
+    }
+
+    fun resetProgress() {
+        state = SettingsState(username = state.username, theme = state.theme, progress = 0)
+        viewModelScope.launch {
+            repository.resetProgress()
+        }
+    }
+
     init {
         viewModelScope.launch {
-            state = SettingsState(repository.username.first(), Theme.valueOf(repository.theme.first()))
+            state = SettingsState(
+                username = repository.username.first(),
+                theme = Theme.valueOf(repository.theme.first().toString()),
+                progress = repository.progress.first())
         }
     }
 }

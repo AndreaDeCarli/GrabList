@@ -52,13 +52,15 @@ import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Product
 import com.example.grablist.ui.viewmodels.ProductsInListState
+import com.example.grablist.ui.viewmodels.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LazyCheckProductsColumn(
     navController: NavController,
     state: ProductsInListState,
-    modifier: Modifier
+    modifier: Modifier,
+    settingsViewModel: SettingsViewModel
 ) {
     var counter by remember { mutableIntStateOf(0) }
     val checked = remember { mutableStateListOf<Boolean>() }
@@ -119,6 +121,7 @@ fun LazyCheckProductsColumn(
                 confirmText = stringResource(R.string.confirm),
                 confirmAction = {
                     showCompletedDialog = false
+                    settingsViewModel.increaseProgress()
                     navController.navigateUp()
                 },
                 onDismissRequest = { },

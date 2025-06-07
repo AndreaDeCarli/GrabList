@@ -31,13 +31,16 @@ import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.LazyCheckProductsColumn
 import com.example.grablist.ui.viewmodels.ProductState
 import com.example.grablist.ui.viewmodels.ProductsInListState
+import com.example.grablist.ui.viewmodels.SettingsState
+import com.example.grablist.ui.viewmodels.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActiveShoppingScreen (
     navController: NavController,
     state: ProductsInListState,
-    shopList: ShopList
+    shopList: ShopList,
+    settingsViewModel: SettingsViewModel
     ) {
 
     var showQuitAlert by remember { mutableStateOf(false) }
@@ -64,7 +67,8 @@ fun ActiveShoppingScreen (
         LazyCheckProductsColumn(
             navController = navController,
             state = state,
-            modifier = Modifier.padding(innerPadding))
+            modifier = Modifier.padding(innerPadding),
+            settingsViewModel = settingsViewModel)
 
         if (showQuitAlert){
             GenericAlertDialog(

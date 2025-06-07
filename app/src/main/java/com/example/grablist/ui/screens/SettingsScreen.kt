@@ -12,6 +12,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -99,6 +100,14 @@ fun SettingsScreen(
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxWidth())
+            }
+            item {
+                Text(text = "Spese completate: ${state.progress}")
+                Button(
+                    onClick = { settingsViewModel.resetProgress() }
+                ) {
+                    Text(text = "reset progress")
+                }
             }
         }
 
