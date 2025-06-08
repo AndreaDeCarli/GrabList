@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.update
 data class AddProductState(
     val name: String = "",
     val imageUri: Uri = Uri.EMPTY,
-    val favorite: Boolean = false
+    val favorite: Boolean = false,
+
+    val askPermissions: Boolean = false,
+    val showPermissionAlert: Boolean = false
 
     ) {
     val canSubmit get() = name.isNotBlank()
@@ -26,6 +29,9 @@ interface AddProductActions {
     fun setName(name: String)
     fun setFavorite(fav: Boolean)
     fun setImageUri(uri: Uri)
+
+    fun setAskPermissions(value: Boolean)
+    fun setShowPermissionAlert(value: Boolean)
 }
 
 class AddNewProductViewModel : ViewModel() {
@@ -41,6 +47,12 @@ class AddNewProductViewModel : ViewModel() {
 
         override fun setImageUri(uri: Uri) {
             _state.update { it.copy(imageUri = uri) }
+        }
+        override fun setAskPermissions(value: Boolean) {
+            _state.update { it.copy(askPermissions = value) }
+        }
+        override fun setShowPermissionAlert(value: Boolean) {
+            _state.update { it.copy(showPermissionAlert = value) }
         }
     }
 }

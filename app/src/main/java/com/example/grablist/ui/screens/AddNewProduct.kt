@@ -1,10 +1,13 @@
 package com.example.grablist.ui.screens
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.SystemClock
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -22,6 +25,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Upload
@@ -56,12 +61,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.grablist.R
+import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddProductActions
 import com.example.grablist.ui.viewmodels.AddProductState
 import com.example.grablist.ui.viewmodels.AddShopListActions
 import com.example.grablist.ui.viewmodels.AddShopListState
+import com.example.grablist.utils.PermissionStatus
 import com.example.grablist.utils.rememberCameraLauncher
+import com.example.grablist.utils.rememberMultiplePermissions
 import com.example.grablist.utils.saveImageToInternalStorage
 import com.example.grablist.utils.saveImageToStorage
 
@@ -92,8 +100,16 @@ fun AddNewProduct (
             imageFound = true
     }
 
-    if (lockFavorites){
-        actions.setFavorite(true)
+    val permissions = rememberMultiplePermissions(
+        listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    ) { statuses ->
+        when {
+            statuses.any { it.value == PermissionStatus.Granted } -> {}
+            statuses.all { it.value == PermissionStatus.PermanentlyDenied } ->
+                actions.setShowPermissionAlert(true)
+            else ->
+                actions.setAskPermissions(true)
+        }
     }
 
     Scaffold (
@@ -111,6 +127,11 @@ fun AddNewProduct (
             Icon(Icons.Outlined.Check, "Add")
         } }
     ) { innerPadding ->
+
+        if (lockFavorites){
+            actions.setFavorite(true)
+        }
+
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -133,6 +154,7 @@ fun AddNewProduct (
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Text(text = "${ stringResource(R.string.favs_title) }: ")
                 IconToggleButton(
                     enabled = !lockFavorites,
@@ -158,8 +180,14 @@ fun AddNewProduct (
             }
             Button(
                 enabled = !imageFound,
-                modifier = Modifier.padding(vertical = 10.dp).size(width = 220.dp, height = 40.dp),
-                onClick = cameraLauncher::captureImage,
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+                    .size(width = 220.dp, height = 40.dp),
+                onClick = {
+                    permissions.launchPermissionRequest()
+                    if (permissions.statuses[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PermissionStatus.Granted){
+                        cameraLauncher.captureImage()
+                    } },
                 colors = ButtonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -175,7 +203,9 @@ fun AddNewProduct (
 
             Button(
                 enabled = !imageFound,
-                modifier = Modifier.padding(vertical = 10.dp).size(width = 220.dp, height = 40.dp),
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+                    .size(width = 220.dp, height = 40.dp),
                 onClick = {
                     launcher.launch("image/*")
                 },
@@ -204,7 +234,24 @@ fun AddNewProduct (
                         .clip(RoundedCornerShape(12.dp))
                 )
             }
+        }
+        if (state.showPermissionAlert){
+            GenericAlertDialog(
+                title = "Permissions Denied",
+                text = "Permissions are permanently denied. Grant Them?",
+                confirmText = stringResource(R.string.confirm),
+                confirmAction = {
+                    ctx.startActivity(
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", ctx.packageName, null)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK })
 
+                    actions.setShowPermissionAlert(false)},
+                dismissText = stringResource(R.string.dismiss),
+                dismissAction = { actions.setShowPermissionAlert(false) },
+                onDismissRequest = { actions.setShowPermissionAlert(false) },
+                icon = Icons.Filled.Error
+            )
         }
     }
 }

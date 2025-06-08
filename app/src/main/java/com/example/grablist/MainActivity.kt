@@ -36,7 +36,8 @@ class MainActivity : ComponentActivity() {
                     Theme.Dark -> true
                     Theme.Light -> false
                     else -> isSystemInDarkTheme()
-                }
+                },
+                dynamicColor = false
             ) {
                 val navController = rememberNavController()
                 GrabListNavGraph(navController, settingsViewModel, settingsState)
