@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.provider.Settings
@@ -107,8 +108,6 @@ fun AddNewProduct (
             statuses.any { it.value == PermissionStatus.Granted } -> {}
             statuses.all { it.value == PermissionStatus.PermanentlyDenied } ->
                 actions.setShowPermissionAlert(true)
-            else ->
-                actions.setAskPermissions(true)
         }
     }
 
@@ -184,8 +183,12 @@ fun AddNewProduct (
                     .padding(vertical = 10.dp)
                     .size(width = 220.dp, height = 40.dp),
                 onClick = {
-                    permissions.launchPermissionRequest()
-                    if (permissions.statuses[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PermissionStatus.Granted){
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P){
+                        permissions.launchPermissionRequest()
+                        if (permissions.statuses[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PermissionStatus.Granted){
+                            cameraLauncher.captureImage()
+                        }
+                    }else{
                         cameraLauncher.captureImage()
                     } },
                 colors = ButtonColors(

@@ -12,7 +12,6 @@ data class AddProductState(
     val imageUri: Uri = Uri.EMPTY,
     val favorite: Boolean = false,
 
-    val askPermissions: Boolean = false,
     val showPermissionAlert: Boolean = false
 
     ) {
@@ -30,7 +29,6 @@ interface AddProductActions {
     fun setFavorite(fav: Boolean)
     fun setImageUri(uri: Uri)
 
-    fun setAskPermissions(value: Boolean)
     fun setShowPermissionAlert(value: Boolean)
 }
 
@@ -45,14 +43,11 @@ class AddNewProductViewModel : ViewModel() {
         override fun setFavorite(fav: Boolean) =
             _state.update { it.copy(favorite = fav) }
 
-        override fun setImageUri(uri: Uri) {
+        override fun setImageUri(uri: Uri) =
             _state.update { it.copy(imageUri = uri) }
-        }
-        override fun setAskPermissions(value: Boolean) {
-            _state.update { it.copy(askPermissions = value) }
-        }
-        override fun setShowPermissionAlert(value: Boolean) {
+
+        override fun setShowPermissionAlert(value: Boolean) =
             _state.update { it.copy(showPermissionAlert = value) }
-        }
+
     }
 }

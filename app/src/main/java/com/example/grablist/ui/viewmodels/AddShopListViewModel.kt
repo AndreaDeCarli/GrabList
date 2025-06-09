@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.update
 data class AddShopListState(
     val title: String = "",
     val date: String = "",
-    val iconId: Long = 0
+    val iconId: Long = 0,
+
+    val showPermissionAlert: Boolean = false,
+    val saveInCalender: Boolean = false
 
     ) {
     val canSubmit get() = title.isNotBlank() && iconId != 0L
@@ -27,6 +30,8 @@ interface AddShopListActions {
     fun setDate(date: String)
     fun setIcon(id: Long)
 
+    fun setShowPermissionAlert(value: Boolean)
+    fun setSaveInCalender(value: Boolean)
 }
 
 class AddShopListViewModel : ViewModel() {
@@ -42,5 +47,11 @@ class AddShopListViewModel : ViewModel() {
 
         override fun setIcon(id: Long) =
             _state.update { it.copy(iconId = id) }
+
+        override fun setShowPermissionAlert(value: Boolean) =
+            _state.update { it.copy(showPermissionAlert = value) }
+
+        override fun setSaveInCalender(value: Boolean) =
+            _state.update { it.copy(saveInCalender = value) }
     }
 }
