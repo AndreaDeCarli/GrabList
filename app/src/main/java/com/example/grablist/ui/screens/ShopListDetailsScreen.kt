@@ -129,10 +129,8 @@ fun ShopListDetailsScreen(
                             maxLines = 1)
                     }
                     Button(
-                        onClick = {
-                            if (state.products.isNotEmpty()){
-                                navController.navigate(NavRoute.ActiveShopping(shopList.shopListId))
-                            } },
+                        enabled = state.products.isNotEmpty(),
+                        onClick = { navController.navigate(NavRoute.ActiveShopping(shopList.shopListId)) },
                         modifier = Modifier
                             .padding(horizontal = 12.dp, vertical = 7.dp)
                             .weight(0.40F),

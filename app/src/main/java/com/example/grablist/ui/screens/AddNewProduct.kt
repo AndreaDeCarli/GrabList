@@ -240,8 +240,8 @@ fun AddNewProduct (
         }
         if (state.showPermissionAlert){
             GenericAlertDialog(
-                title = "Permissions Denied",
-                text = "Permissions are permanently denied. Grant Them?",
+                title = stringResource(R.string.permissions_title),
+                text = stringResource(R.string.permissions_text),
                 confirmText = stringResource(R.string.confirm),
                 confirmAction = {
                     ctx.startActivity(

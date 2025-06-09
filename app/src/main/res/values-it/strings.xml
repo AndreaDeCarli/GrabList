@@ -23,4 +23,10 @@
     <string name="quit_shopping_title">Esci dalla spesa</string>
     <string name="completed_shopping_title">Spesa Completata</string>
     <string name="completed_shopping_text">Hai completato questa lista della spesa!</string>
+    <string name="reset_progress">Resetta Progresso</string>
+    <string name="completed_progress">Spese completate</string>
+    <string name="add_to_calendar">Aggiungi al Calendario</string>
+    <string name="permissions_title">Permessi non Forniti</string>
+    <string name="permissions_text">Permessi per questa azione sono permanentemente negati. Andare alle impostazioni?</string>
+    <string name="progress_info">I progressi fatti con le spese verrà resettato dopo una settimana di inattività</string>
 </resources>

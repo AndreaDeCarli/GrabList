@@ -152,7 +152,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                         }
                     }
                 )
-                Text("Save in Calendar")
+                Text(stringResource(R.string.add_to_calendar))
             }
 
             if (showDatePicker){
@@ -211,8 +211,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
 
             if (state.showPermissionAlert){
                 GenericAlertDialog(
-                    title = "Permissions Denied",
-                    text = "Permissions are permanently denied. Grant Them?",
+                    title = stringResource(R.string.permissions_title),
+                    text = stringResource(R.string.permissions_text),
                     confirmText = stringResource(R.string.confirm),
                     confirmAction = {
                         ctx.startActivity(

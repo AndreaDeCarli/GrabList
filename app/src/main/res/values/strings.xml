@@ -23,4 +23,10 @@
     <string name="quit_shopping_title">Exit shopping</string>
     <string name="completed_shopping_title">Shopping Completed</string>
     <string name="completed_shopping_text">You have completed this Shopping List!</string>
+    <string name="reset_progress">Reset Progress</string>
+    <string name="completed_progress">Lists completed</string>
+    <string name="add_to_calendar">Add to Calendar</string>
+    <string name="permissions_title">Permissions not Granted</string>
+    <string name="permissions_text">Permissions needed for this action are permanently denied. Go to options?</string>
+    <string name="progress_info">Progress with shoppings will reset after a week of inactivity</string>
 </resources>

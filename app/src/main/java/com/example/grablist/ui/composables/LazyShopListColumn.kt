@@ -149,7 +149,8 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                     title = stringResource(R.string.delete_shoplist_dialog_title),
                     text = stringResource(R.string.delete_shoplist_dialog_text),
                     confirmText = stringResource(R.string.confirm),
-                    confirmAction = { vm.deleteShopList(item) },
+                    confirmAction = { vm.deleteShopList(item)
+                                    showAlert = false},
                     dismissText = stringResource(R.string.dismiss),
                     dismissAction = { showAlert = false },
                     onDismissRequest = { showAlert = false },

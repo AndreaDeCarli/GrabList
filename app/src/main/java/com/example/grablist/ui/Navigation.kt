@@ -141,9 +141,14 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
         composable<NavRoute.ChooseFavProduct> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ShopListDetails>()
             val shopList = requireNotNull(shopListState.shopLists.find { it.shopListId == route.id })
+
+            val productsInListVm: ProductsInShopListViewModel = koinViewModel(parameters = { parametersOf(shopList.shopListId) })
+            val state by productsInListVm.state.collectAsState()
+
             ChooseFavoriteScreen(
                 navController = navController,
                 vm = productVm,
+                products = state.products,
                 shopList = shopList
             )
         }

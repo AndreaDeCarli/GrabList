@@ -153,7 +153,7 @@ fun CheckProductItem(product: Product, counter: () -> Unit, checked: Boolean){
             .toggleable(
                 value = checked,
                 onValueChange = { counter() })
-            .shadow(if (checked) 0.dp else 3.dp, CardDefaults.shape),
+            .shadow(if (checked) 0.dp else 4.dp, CardDefaults.shape),
         shape = CardDefaults.shape,
         colors = colors
     ){

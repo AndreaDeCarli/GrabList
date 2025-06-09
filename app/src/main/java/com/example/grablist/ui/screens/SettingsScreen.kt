@@ -1,6 +1,7 @@
 package com.example.grablist.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -102,12 +103,19 @@ fun SettingsScreen(
                         .fillMaxWidth())
             }
             item {
-                Text(text = "Spese completate: ${state.progress}")
-                Button(
-                    onClick = { settingsViewModel.resetProgress() }
+                Row(
+                    modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "reset progress")
+                    Text(text = "${stringResource(R.string.completed_progress)}: ${state.progress}")
+                    Button(
+                        onClick = { settingsViewModel.resetProgress() }
+                    ) {
+                        Text(text = stringResource(R.string.reset_progress))
+                    }
                 }
+
             }
         }
 
