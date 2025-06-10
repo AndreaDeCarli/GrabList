@@ -5,14 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -82,7 +87,7 @@ fun Profile(navController: NavController,
                         Image(
                             painter = painterResource(tier.iconId),
                             contentDescription = "tierImage",
-                            modifier = Modifier.size(50.dp))
+                            modifier = Modifier.padding(15.dp).size(65.dp))
                     }
 
                 }
@@ -98,6 +103,25 @@ fun Profile(navController: NavController,
             item { ProfileEntry(stringResource(R.string.home_title), shopListState.shopLists.size) }
             item { ProfileEntry(stringResource(R.string.favs_title), productsFavorites.products.size) }
             item { TierProgressBar(settingsState.progress) }
+            item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = "information",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(0.15F)
+                    )
+                    Text(
+                        text = stringResource(R.string.progress_info),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(0.85F)
+                    )
+                }
+            }
+            item { Spacer(modifier = Modifier.height(50.dp)) }
         }
     }
 }

@@ -122,6 +122,7 @@ fun LazyCheckProductsColumn(
                 confirmAction = {
                     showCompletedDialog = false
                     settingsViewModel.increaseProgress()
+                    settingsViewModel.setLatestProgressDate()
                     navController.navigateUp()
                 },
                 onDismissRequest = { },

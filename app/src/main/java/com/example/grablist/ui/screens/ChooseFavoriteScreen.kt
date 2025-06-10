@@ -49,8 +49,6 @@ fun ChooseFavoriteScreen(
                     delay(300)
                     vm.addReference(product, shopList)
                 }
-
-
             },
             noInteractions = true,
             canClick = {product -> product !in products }

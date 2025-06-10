@@ -28,5 +28,15 @@
     <string name="add_to_calendar">Aggiungi al Calendario</string>
     <string name="permissions_title">Permessi non Forniti</string>
     <string name="permissions_text">Permessi per questa azione sono permanentemente negati. Andare alle impostazioni?</string>
-    <string name="progress_info">I progressi fatti con le spese verrà resettato dopo una settimana di inattività</string>
+    <string name="progress_info">I progressi fatti con le spese verranno resettati dopo una settimana di inattività.</string>
+    <string name="current_generic">Attuale</string>
+    <string name="next_generic">Prossimo</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="theme_system">Sistema</string>
+    <string name="tier_bronze">Bronzo</string>
+    <string name="tier_silver">Argento</string>
+    <string name="tier_gold">Oro</string>
+    <string name="tier_star">Stella</string>
+    <string name="tier_none">Nessuno</string>
 </resources>

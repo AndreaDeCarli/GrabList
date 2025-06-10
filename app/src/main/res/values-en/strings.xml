@@ -28,5 +28,15 @@
     <string name="add_to_calendar">Add to Calendar</string>
     <string name="permissions_title">Permissions not Granted</string>
     <string name="permissions_text">Permissions needed for this action are permanently denied. Go to options?</string>
-    <string name="progress_info">Progress with shoppings will reset after a week of inactivity</string>
+    <string name="progress_info">Progress with shoppings will reset after a week of inactivity.</string>
+    <string name="current_generic">Current</string>
+    <string name="next_generic">Next</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="tier_bronze">Bronze</string>
+    <string name="tier_silver">Silver</string>
+    <string name="tier_gold">Gold</string>
+    <string name="tier_star">Star</string>
+    <string name="tier_none">None</string>
 </resources>

@@ -5,9 +5,20 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
+import com.example.grablist.utils.CalendarVariables.Companion.oneHour
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+
+
+class CalendarVariables{
+    companion object{
+        val oneHour: Long = 60 * 60 * 1000L
+        val oneDay: Long = oneHour * 24
+        val oneWeek: Long = oneDay * 7
+    }
+}
+
 
 fun getPrimaryCalendarId(context: Context): Long? {
     val projection = arrayOf(
@@ -45,11 +56,11 @@ fun addCalendarEvent(
     val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     val dateInMillis = requireNotNull(formatter.parse(date)?.time)
 
-    val oneHour = 60 * 60 * 1000L
+
 
     val values = ContentValues().apply {
-        put(CalendarContract.Events.DTSTART, dateInMillis + oneHour*14)
-        put(CalendarContract.Events.DTEND, dateInMillis + oneHour *16)
+        put(CalendarContract.Events.DTSTART, dateInMillis + oneHour * 14)
+        put(CalendarContract.Events.DTEND, dateInMillis + oneHour * 16)
         put(CalendarContract.Events.TITLE, title)
         put(CalendarContract.Events.DESCRIPTION, description)
         put(CalendarContract.Events.CALENDAR_ID, calendarId)

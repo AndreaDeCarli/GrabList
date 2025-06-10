@@ -35,10 +35,10 @@ interface ProductDao{
     @Query("SELECT * FROM product WHERE productId = :id")
     fun getProductById(id: Long): Flow<Product>
 
-    @Query("SELECT * FROM product JOIN crossref ON product.productId = crossref.productId WHERE shopListId = :id")
+    @Query("SELECT * FROM product JOIN crossref ON product.productId = crossref.productId WHERE shopListId = :id ORDER BY product.name")
     fun getProductsByListId(id: Long): Flow<List<Product>>
 
-    @Query("SELECT * FROM product WHERE favorite = 1")
+    @Query("SELECT * FROM product WHERE favorite = 1 ORDER BY product.name")
     fun getFavorites(): Flow<List<Product>>
 }
 

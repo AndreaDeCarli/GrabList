@@ -85,7 +85,7 @@ fun SettingsScreen(
                                 onClick = null
                             )
                             Text(
-                                text = theme.toString(),
+                                text = stringResource(theme.label),
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(start = 16.dp)
                             )

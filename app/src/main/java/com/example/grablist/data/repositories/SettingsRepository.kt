@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.grablist.data.database.Theme
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +19,13 @@ class SettingsRepository(
         private val USERNAME_KEY = stringPreferencesKey("username")
         private val THEME_KEY = stringPreferencesKey("theme")
         private val SHOPPING_PROGRESS = intPreferencesKey("progress")
+        private val PROGRESS_DATE = longPreferencesKey("progressDate")
     }
 
     val username = dataStore.data.map { it[USERNAME_KEY] ?: "username" }
     val theme = dataStore.data.map { it[THEME_KEY] ?: "System" }
     val progress = dataStore.data.map { it[SHOPPING_PROGRESS] ?: 0 }
+    val latestProgressDate = dataStore.data.map { it[PROGRESS_DATE] ?: 0L }
 
     suspend fun setUsername(username: String) = dataStore.edit { it[USERNAME_KEY] = username }
 
@@ -31,5 +34,7 @@ class SettingsRepository(
     suspend fun increaseProgress() = dataStore.edit { it[SHOPPING_PROGRESS] = progress.first() + 1 }
 
     suspend fun resetProgress() = dataStore.edit { it[SHOPPING_PROGRESS] = 0 }
+
+    suspend fun setLatestProgressDate(date: Long) = dataStore.edit { it[PROGRESS_DATE] = date }
 
 }

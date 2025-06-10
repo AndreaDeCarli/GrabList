@@ -22,8 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.grablist.R
 import com.example.grablist.data.database.Tier
 import com.example.grablist.data.database.evaluateNextTier
 import com.example.grablist.data.database.evaluateTier
@@ -55,11 +57,11 @@ fun TierProgressBar(
                     modifier = Modifier
                         .weight(0.8F)
                         .height(10.dp),
-                    progress = { progress/tier.max.toFloat() },
+                    progress = { if (tier == Tier.Star) 1.0F else progress/tier.max.toFloat() },
                     color = MaterialTheme.colorScheme.tertiary,
                     strokeCap = StrokeCap.Round,
                 )
-                Text(text = "${progress}/${tier.max}",
+                Text(text = "${progress}/${if (tier == Tier.Star) "-" else tier.max}",
                     modifier = Modifier
                         .padding(10.dp)
                         .weight(0.2F),
@@ -71,19 +73,21 @@ fun TierProgressBar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text("Current: ${tier.name}")
+                Text("${stringResource(R.string.current_generic)}: ${stringResource(tier.label)}")
                 if (tier != Tier.None){
                     Image(
                         painter = painterResource(tier.iconId),
                         contentDescription = "currentTier",
                         modifier = Modifier.size(40.dp))
                 }
+                if (tier != Tier.Star){
+                    Text("${stringResource(R.string.next_generic)}: ${stringResource(nextTier.label)}")
+                    Image(
+                        painter = painterResource(nextTier.iconId),
+                        contentDescription = "nextTier",
+                        modifier = Modifier.size(40.dp))
+                }
 
-                Text("Next: ${nextTier.name}")
-                Image(
-                    painter = painterResource(nextTier.iconId),
-                    contentDescription = "nextTier",
-                    modifier = Modifier.size(40.dp))
             }
 
         }
