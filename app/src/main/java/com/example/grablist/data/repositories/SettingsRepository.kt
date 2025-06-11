@@ -1,5 +1,6 @@
 package com.example.grablist.data.repositories
 
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -20,12 +21,16 @@ class SettingsRepository(
         private val THEME_KEY = stringPreferencesKey("theme")
         private val SHOPPING_PROGRESS = intPreferencesKey("progress")
         private val PROGRESS_DATE = longPreferencesKey("progressDate")
+        private val PROFILE_PIC_URI = stringPreferencesKey("profilePic")
     }
 
     val username = dataStore.data.map { it[USERNAME_KEY] ?: "username" }
     val theme = dataStore.data.map { it[THEME_KEY] ?: "System" }
     val progress = dataStore.data.map { it[SHOPPING_PROGRESS] ?: 0 }
     val latestProgressDate = dataStore.data.map { it[PROGRESS_DATE] ?: 0L }
+    val profilePicUri = dataStore.data.map { it[PROFILE_PIC_URI] ?: Uri.EMPTY.toString() }
+
+    suspend fun setProfilePicUri(uri: Uri) = dataStore.edit { it[PROFILE_PIC_URI] = uri.toString() }
 
     suspend fun setUsername(username: String) = dataStore.edit { it[USERNAME_KEY] = username }
 

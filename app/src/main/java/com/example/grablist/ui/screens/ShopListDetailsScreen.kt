@@ -59,7 +59,7 @@ fun ShopListDetailsScreen(
         floatingActionButton = {
             var expanded by remember { mutableStateOf(false) }
             FloatingActionButton(
-                onClick = { expanded = !expanded/*navController.navigate(NavRoute.AddNewProduct(shopList.shopListId))*/ },
+                onClick = { expanded = !expanded },
                 elevation = FloatingActionButtonDefaults.elevation(4.dp),
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.surface,

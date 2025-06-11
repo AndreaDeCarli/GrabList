@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
@@ -28,6 +29,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,7 +72,7 @@ fun LazyProductColumn(
                 }
             }
         }
-        item { Spacer(modifier = Modifier.height(75.dp)) }
+        item { Spacer(modifier = Modifier.height(75.dp)) } //added this so that the productCards options icon is not covered by the floatingActionButton
     }
 
 }
@@ -85,6 +87,16 @@ fun ProductCard(
     noInteractions: Boolean
 ){
     var expanded by remember { mutableStateOf(false) }
+
+    val menuItemsColors = MenuItemColors(
+        textColor = MaterialTheme.colorScheme.onPrimary,
+        leadingIconColor = MaterialTheme.colorScheme.onPrimary,
+        trailingIconColor = MaterialTheme.colorScheme.onPrimary,
+        disabledTextColor = MaterialTheme.colorScheme.onPrimary,
+        disabledLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+        disabledTrailingIconColor = MaterialTheme.colorScheme.onPrimary
+    )
+
     Card(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 3.dp
@@ -156,6 +168,7 @@ fun ProductCard(
                             onDismissRequest = { expanded = false }
                         ) {
                             DropdownMenuItem(
+                                leadingIcon = { Icon(Icons.Filled.Delete, "delete", tint = MaterialTheme.colorScheme.onBackground) },
                                 text = { Text(stringResource(R.string.remove_generic)) },
                                 onClick = {
                                     vm.deleteProduct(product, shopList)
@@ -163,7 +176,8 @@ fun ProductCard(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("Favorite") },
+                                leadingIcon = { Icon(Icons.Filled.Favorite, "fav", tint = MaterialTheme.colorScheme.onBackground) },
+                                text = { Text(stringResource(R.string.favs_title)) },
                                 onClick = {
                                     vm.changeFavorite(product)
                                     expanded = false

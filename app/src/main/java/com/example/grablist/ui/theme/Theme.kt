@@ -15,57 +15,59 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
-import com.example.grablist.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = BluePrimaryDark,
-    onPrimary = TextPrimaryDark,
+    onPrimary = White,
 
     secondary = BlueSecondaryDark,
-    onSecondary = TextPrimaryDark,
+    onSecondary = White,
 
     tertiary = BlueTertiaryDark,
-    onTertiary = TextPrimaryDark,
+    onTertiary = White,
 
     background = BackgroundDark,
-    onBackground = TextPrimaryDark,
+    onBackground = White,
 
     surface = SurfaceDark,
-    onSurface = TextPrimaryDark,
+    onSurface = White,
 
     error = ErrorRed,
-    onError = TextPrimaryDark,
+    onError = White,
 
     surfaceVariant = SurfaceVariantDark,
-    onSurfaceVariant = TextTertiary,
+    onSurfaceVariant = LightGrey,
+
+    inverseSurface = MediumGrey,
+    inverseOnSurface = LightGrey
 
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = BluePrimary,
-    onPrimary = TextPrimary,
+    onPrimary = White,
 
     secondary = BlueSecondary,
-    onSecondary = Color.White,
+    onSecondary = White,
 
     tertiary = BlueTertiary,
-    onTertiary = TextPrimary,
+    onTertiary = White,
 
     background = BackgroundLight,
-    onBackground = TextSecondary,
+    onBackground = DarkGrey,
 
     surface = SurfaceBackground,
-    onSurface = TextSecondary,
+    onSurface = DarkGrey,
 
     error = ErrorRed,
-    onError = Color.White,
+    onError = White,
 
     surfaceVariant = SurfaceVariant,
-    onSurfaceVariant = TextTertiary,
+    onSurfaceVariant = LightGrey,
 
-
+    inverseSurface = LightGrey,
+    inverseOnSurface = MediumGrey
 )
 
 @Composable

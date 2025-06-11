@@ -1,7 +1,9 @@
 package com.example.grablist.ui.screens
 
 import android.graphics.drawable.Icon
+import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.Info
@@ -26,8 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.grablist.R
 import com.example.grablist.data.database.Tier
 import com.example.grablist.data.database.evaluateTier
@@ -77,17 +83,27 @@ fun Profile(navController: NavController,
                     modifier = Modifier.padding(12.dp).size(250.dp, 250.dp),
                     contentAlignment = Alignment.TopEnd,
                     ) {
-                    Image(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "ProfileImage",
-                    modifier = Modifier.fillMaxSize(),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground))
+                    if (settingsState.profilePicUri != Uri.EMPTY){
+                        AsyncImage(
+                            settingsState.profilePicUri,
+                            contentDescription = "deca",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.clip(CircleShape).fillMaxSize(),
+                        )
+                    }else{
+                        Image(
+                            imageVector = Icons.Filled.AccountCircle,
+                            contentDescription = "ProfileImage",
+                            modifier = Modifier.fillMaxSize(),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground))
+                    }
+
 
                     if (tier != Tier.None){
                         Image(
                             painter = painterResource(tier.iconId),
                             contentDescription = "tierImage",
-                            modifier = Modifier.padding(15.dp).size(65.dp))
+                            modifier = Modifier.padding(10.dp).size(65.dp))
                     }
 
                 }

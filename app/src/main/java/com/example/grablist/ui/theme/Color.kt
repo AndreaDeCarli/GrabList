@@ -8,9 +8,8 @@ val BlueSecondaryDark = Color(0xFF202F59)
 val BlueTertiaryDark = Color(0xFF1C478C)
 
 val BackgroundDark = Color(0xFF0D1117)
-val SurfaceDark = Color(0xFF572321)
+val SurfaceDark = Color(0xFFB96348)
 
-val TextPrimaryDark = Color(0xFFFFFFFF)
 val SurfaceVariantDark = Color(0xFF414154)
 
 
@@ -25,8 +24,13 @@ val SurfaceBackground = Color(0xFFFFC7AF)
 
 val SurfaceVariant = Color(0xFFE9E9FF)
 
-val TextPrimary = Color(0xFFFFFFFF)
-val TextSecondary = Color(0xFF1F1F1F)
-val TextTertiary = Color(0xFF7C7C7C)
 
+
+//General
+
+val White = Color(0xFFFFFFFF)
+val DarkGrey = Color(0xFF1F1F1F)
+val MediumGrey = Color(0xFF424242)
+val LightGrey = Color(0xFF7C7C7C)
 val ErrorRed = Color(0xFFD32F2F)
+
