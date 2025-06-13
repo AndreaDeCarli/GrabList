@@ -1,6 +1,7 @@
 package com.example.grablist.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.example.grablist.data.database.Location
 import com.example.grablist.data.database.ShopList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,6 +12,9 @@ data class AddShopListState(
     val title: String = "",
     val date: String = "",
     val iconId: Long = 0,
+    val locationName: String = "",
+    val longitude: Double = 0.0,
+    val latitude: Double = 0.0,
 
     val showPermissionAlert: Boolean = false,
     val saveInCalender: Boolean = false
@@ -22,6 +26,11 @@ data class AddShopListState(
         title = title,
         date = date,
         iconId = iconId,
+        location = Location(
+            name = locationName,
+            longitude = longitude,
+            latitude = latitude
+        )
     )
 }
 
@@ -29,6 +38,9 @@ interface AddShopListActions {
     fun setTitle(title: String)
     fun setDate(date: String)
     fun setIcon(id: Long)
+    fun setLocationName(name: String)
+    fun setLongitude(number: Double)
+    fun setLatitude(number: Double)
 
     fun setShowPermissionAlert(value: Boolean)
     fun setSaveInCalender(value: Boolean)
@@ -53,5 +65,15 @@ class AddShopListViewModel : ViewModel() {
 
         override fun setSaveInCalender(value: Boolean) =
             _state.update { it.copy(saveInCalender = value) }
+
+        override fun setLocationName(name: String) =
+            _state.update { it.copy(locationName = name) }
+
+        override fun setLongitude(number: Double) =
+            _state.update { it.copy(longitude = number) }
+
+        override fun setLatitude(number: Double) =
+            _state.update { it.copy(latitude = number) }
+
     }
 }

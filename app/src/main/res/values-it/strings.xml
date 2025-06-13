@@ -39,4 +39,9 @@
     <string name="tier_gold">Oro</string>
     <string name="tier_star">Stella</string>
     <string name="tier_none">Nessuno</string>
+    <string name="settings_title_name">Nome Profilo</string>
+    <string name="settings_title_theme">Tema</string>
+    <string name="settings_title_progress">Progresso Medaglie</string>
+    <string name="settings_title_pic">Foto Profilo</string>
+    <string name="delete_pic">Elimina Foto</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.grablist.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -24,6 +27,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -47,6 +51,7 @@ import com.example.grablist.ui.composables.LazyProductColumn
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.ProductsInListState
 import com.example.grablist.ui.viewmodels.ProductsViewModel
+import com.example.grablist.utils.MapComposable
 
 @Composable
 fun ShopListDetailsScreen(
@@ -54,8 +59,16 @@ fun ShopListDetailsScreen(
     shopList: ShopList,
     vm: ProductsViewModel,
     state: ProductsInListState) {
+
+    var showMap by remember { mutableStateOf(false) }
+
+    BackHandler {
+        showMap = false
+        navController.navigateUp()
+    }
+
     Scaffold(
-        topBar = { MainTopAppBar(navController = navController, title = shopList.title, goBack = true) },
+        topBar = { MainTopAppBar(navController = navController, title = shopList.title, goBack = true, additionalAction = { showMap = false }) },
         floatingActionButton = {
             var expanded by remember { mutableStateOf(false) }
             FloatingActionButton(
@@ -96,6 +109,9 @@ fun ShopListDetailsScreen(
             }
         }
     ) { innerPadding ->
+
+
+
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -128,6 +144,7 @@ fun ShopListDetailsScreen(
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1)
                     }
+                    IconButton(onClick = { showMap = !showMap }) { Icon(imageVector = if (showMap) Icons.Filled.Info else Icons.Outlined.Info, "info") }
                     Button(
                         enabled = state.products.isNotEmpty(),
                         onClick = { navController.navigate(NavRoute.ActiveShopping(shopList.shopListId)) },
@@ -143,6 +160,17 @@ fun ShopListDetailsScreen(
                     }
                 }
             }
+
+            if (showMap){
+                Surface(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth()) {
+                    MapComposable(shopList = shopList, modifier = Modifier.padding(20.dp).fillMaxSize())
+                }
+            }
+
             LazyProductColumn(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)

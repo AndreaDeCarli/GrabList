@@ -100,7 +100,7 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                     .weight(0.25F),
                 contentAlignment = Alignment.Center,
             ){
-                Image( painter = painterResource(item.iconId.toInt()),
+                Image(painterResource(item.iconId.toInt()),
                     contentDescription = "List picture",
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surfaceVariant)

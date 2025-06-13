@@ -1,8 +1,15 @@
 package com.example.grablist.data.database
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+
+data class Location(
+    val name: String,
+    val longitude: Double,
+    val latitude: Double
+)
 
 @Entity
 data class ShopList(
@@ -16,7 +23,10 @@ data class ShopList(
     val iconId: Long,
 
     @ColumnInfo
-    val date: String
+    val date: String,
+
+    @Embedded
+    val location: Location
 )
 
 @Entity

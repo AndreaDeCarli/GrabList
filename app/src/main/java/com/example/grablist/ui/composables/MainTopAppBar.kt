@@ -16,11 +16,14 @@ import com.example.grablist.ui.NavRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean, options: Boolean = true){
+fun MainTopAppBar(navController: NavController, title: String, goBack: Boolean, options: Boolean = true, additionalAction: () -> Unit = {}){
     TopAppBar(
         title = { Text(title) },
         navigationIcon = { if (goBack) {
-            IconButton( onClick = {navController.navigateUp()}) {
+            IconButton( onClick = {
+                additionalAction()
+                navController.navigateUp()
+            }) {
                 Icon(Icons.Filled.ArrowBackIosNew, "Back")
             }
         } },

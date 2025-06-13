@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,7 +37,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +56,7 @@ import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddShopListActions
 import com.example.grablist.ui.viewmodels.AddShopListState
+import com.example.grablist.utils.LocationPickerMap
 import com.example.grablist.utils.PermissionStatus
 import com.example.grablist.utils.addCalendarEvent
 import com.example.grablist.utils.getPrimaryCalendarId
@@ -164,7 +165,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
             }
 
             var selected by remember { mutableIntStateOf(0) }
-            val imagesIds = listOf(R.drawable.sprite_0, R.drawable.sprite_1,R.drawable.sprite_2,R.drawable.sprite_3,R.drawable.sprite_4, R.drawable.sprite_5,R.drawable.sprite_6,R.drawable.sprite_7)
+            val imagesIds = listOf(R.drawable.sprite0, R.drawable.sprite1,R.drawable.sprite2,R.drawable.sprite3,R.drawable.sprite4, R.drawable.sprite5,R.drawable.sprite6,R.drawable.sprite7)
             actions.setIcon(imagesIds[selected].toLong())
             LazyRow() {
                 items(imagesIds.size){
@@ -208,6 +209,15 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                     }
                 }
             }
+
+            LocationPickerMap(
+                modifier = Modifier.height(300.dp).padding(20.dp).fillMaxWidth(),
+                onLocationSelected = {
+                    actions.setLatitude(it.latitude)
+                    actions.setLongitude(it.longitude)
+                    actions.setLocationName("Selected Location")
+                }
+            )
 
             if (state.showPermissionAlert){
                 GenericAlertDialog(

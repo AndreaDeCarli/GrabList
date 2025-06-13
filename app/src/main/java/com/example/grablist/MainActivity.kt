@@ -21,6 +21,7 @@ import com.example.grablist.ui.GrabListNavGraph
 import com.example.grablist.ui.theme.GrabListTheme
 import com.example.grablist.ui.viewmodels.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.maplibre.android.MapLibre
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,8 @@ class MainActivity : ComponentActivity() {
 
             val settingsViewModel = koinViewModel<SettingsViewModel>()
             val settingsState = settingsViewModel.state
+
+            MapLibre.getInstance(this)
 
             GrabListTheme(
                 darkTheme = when (settingsState.theme) {

@@ -152,7 +152,7 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                CustomDivider("Profile Name")
+                CustomDivider(stringResource(R.string.settings_title_name))
                 OutlinedTextField(
                     onValueChange = { settingsViewModel.setUsername(it) },
                     value = state.username,
@@ -163,7 +163,7 @@ fun SettingsScreen(
 
             }
             item {
-                CustomDivider("Theme")
+                CustomDivider(stringResource(R.string.settings_title_theme))
                 Row(Modifier.selectableGroup()) {
                     Theme.entries.forEach { theme ->
                         Row(
@@ -191,7 +191,7 @@ fun SettingsScreen(
                 }
             }
             item {
-                CustomDivider("Progress")
+                CustomDivider(stringResource(R.string.settings_title_progress))
                 Row(
                     modifier = Modifier.padding(12.dp).fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -207,7 +207,7 @@ fun SettingsScreen(
 
             }
             item {
-                CustomDivider("Profile Picture")
+                CustomDivider(stringResource(R.string.settings_title_pic))
                 Button(
                     enabled = state.profilePicUri == Uri.EMPTY,
                     modifier = Modifier
@@ -256,7 +256,7 @@ fun SettingsScreen(
                     colors = buttonColors
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Elimina Foto", modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                        Text(stringResource(R.string.delete_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
                         Icon(Icons.Filled.Delete, "search", modifier = Modifier.weight(0.2F))
                     }
                 }
@@ -274,6 +274,10 @@ fun CustomDivider(text: String) {
         modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+//        HorizontalDivider(
+//            modifier = Modifier.width(12.dp).padding(vertical = 10.dp),
+//            thickness = 1.dp,
+//            color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(
             text = text,
             textAlign = TextAlign.Center,

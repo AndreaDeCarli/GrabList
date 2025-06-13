@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.junit)
     implementation(libs.coil.compose)
+    implementation(libs.android.sdk)
     implementation(libs.androidx.datastore.preferences)
     ksp(libs.androidx.room.compiler)
     implementation(libs.ktor.serialization.kotlinx.json)
