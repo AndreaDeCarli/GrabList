@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DatePicker
@@ -41,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,15 +55,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.grablist.R
+import com.example.grablist.data.database.Location
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddShopListActions
 import com.example.grablist.ui.viewmodels.AddShopListState
 import com.example.grablist.utils.LocationPickerMap
+import com.example.grablist.utils.OSMDataSource
 import com.example.grablist.utils.PermissionStatus
 import com.example.grablist.utils.addCalendarEvent
 import com.example.grablist.utils.getPrimaryCalendarId
 import com.example.grablist.utils.rememberMultiplePermissions
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -69,6 +77,15 @@ import java.util.Locale
 fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: () -> Unit, navController: NavController){
 
     val ctx = LocalContext.current
+    var showMap by remember { mutableStateOf(false) }
+    val osmDataSource = koinInject<OSMDataSource>()
+
+    val scope = rememberCoroutineScope()
+    fun setNameFromLocation(location: Location) = scope.launch {
+        val place = osmDataSource.getPlace(location).displayName.split(",")
+        val realName = "${place[0]},${place[3]}"
+        actions.setLocationName(realName)
+    }
 
     val permissions = rememberMultiplePermissions(
         listOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)
@@ -189,7 +206,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.tertiary)
                             ,
-                            contentDescription = "deca",
+                            contentDescription = "ShoppingIcon",
                         )
                     }else{
                         Image(
@@ -204,20 +221,34 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                                         selected = it;actions.setIcon(imagesIds[it].toLong())
                                     })
                                 .clip(RoundedCornerShape(20.dp)),
-                            contentDescription = "deca"
+                            contentDescription = "ShoppingIcon"
                         )
                     }
                 }
             }
+            Button(
+                enabled = !showMap,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),
+                onClick = { showMap = !showMap }
+            ) {
+                Text(text = "Add Location")
+                Icon(Icons.Outlined.Map, "map")
+            }
 
-            LocationPickerMap(
-                modifier = Modifier.height(300.dp).padding(20.dp).fillMaxWidth(),
-                onLocationSelected = {
-                    actions.setLatitude(it.latitude)
-                    actions.setLongitude(it.longitude)
-                    actions.setLocationName("Selected Location")
-                }
-            )
+            if (showMap){
+                LocationPickerMap(
+                    modifier = Modifier
+                        .height(300.dp)
+                        .padding(20.dp)
+                        .fillMaxWidth(),
+                    onLocationSelected = {
+                        actions.setLatitude(it.latitude)
+                        actions.setLongitude(it.longitude)
+                        setNameFromLocation(Location("", it.longitude, it.latitude))
+                    }
+                )
+            }
+
 
             if (state.showPermissionAlert){
                 GenericAlertDialog(

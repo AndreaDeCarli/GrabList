@@ -137,14 +137,25 @@ fun ShopListDetailsScreen(
                         horizontalAlignment = Alignment.Start
 
                     ) {
-                        Text(text = "${stringResource(R.string.title_generic)} : ${shopList.title}",
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1)
-                        Text(text = "${stringResource(R.string.date_generic)} : ${shopList.date}",
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1)
+                        if (shopList.location.name != ""){
+                            Text(text = shopList.location.name,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1)
+                        }else{
+                            Text(text = shopList.title,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1)
+                        }
+                        if (shopList.date != ""){
+                            Text(text = shopList.date,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1)
+                        }
+
                     }
-                    IconButton(onClick = { showMap = !showMap }) { Icon(imageVector = if (showMap) Icons.Filled.Info else Icons.Outlined.Info, "info") }
+                    if (shopList.location.name != ""){
+                        IconButton(onClick = { showMap = !showMap }) { Icon(imageVector = if (showMap) Icons.Filled.Info else Icons.Outlined.Info, "info") }
+                    }
                     Button(
                         enabled = state.products.isNotEmpty(),
                         onClick = { navController.navigate(NavRoute.ActiveShopping(shopList.shopListId)) },

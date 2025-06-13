@@ -14,6 +14,11 @@ import com.example.grablist.ui.viewmodels.ProductsInShopListViewModel
 import com.example.grablist.ui.viewmodels.ProductsViewModel
 import com.example.grablist.ui.viewmodels.SettingsViewModel
 import com.example.grablist.ui.viewmodels.ShopListViewModel
+import com.example.grablist.utils.OSMDataSource
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.scope.get
 import org.koin.dsl.module
@@ -34,6 +39,16 @@ val appModule = module {
     }
 
     single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                })
+            }
+        }
+    }
+
+    single {
         ShopListRepository(
             get<ShopListDatabase>().shopListDAO(),
             get<ShopListDatabase>().productDAO(),
@@ -41,6 +56,8 @@ val appModule = module {
             get<Context>()
         )
     }
+
+    single { OSMDataSource(get()) }
 
     single { SettingsRepository(get()) }
 
