@@ -2,6 +2,7 @@ package com.example.grablist.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Image
@@ -40,10 +42,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.grablist.R
+import com.example.grablist.data.database.Location
 import com.example.grablist.data.database.ShopList
 import com.example.grablist.ui.NavRoute
 import com.example.grablist.ui.viewmodels.ShopListState
@@ -70,6 +77,19 @@ fun LazyShopListColumn(
     }
 
 }
+//
+//@Preview
+//@Composable
+//fun PreviewLazyShopList(){
+//    LazyShopListColumn(
+//        navController = rememberNavController(),
+//        state = ShopListState(listOf(
+//            ShopList(1,"Lista spesa molto lungaaaa", R.drawable.sprite0.toLong(),"01/03/2025", Location("Conad City, Savignano", 0.0,0.0)),
+//            ShopList(2,"Spesa proteica", R.drawable.sprite3.toLong(),"21/06/2025", Location("", 0.0,0.0)),
+//            ShopList(3,"Spesa Scema", R.drawable.sprite5.toLong(),"", Location("Iper, Savignano", 0.0,0.0)))),
+//        vm = null
+//    )
+//}
 
 @Composable
 fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit) {
@@ -109,24 +129,58 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                 )
             }
             Column (
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
                     .weight(0.65F)
             ) {
-                Text(text = item.title, fontSize = 20.sp, modifier = Modifier.padding(5.dp), color = MaterialTheme.colorScheme.onSecondary)
-                Text(
-                    text = item.date,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(5.dp),
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
+
+                Row(modifier = Modifier.fillMaxWidth().weight(0.5F),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = item.title,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(start = 5.dp).weight(0.7F),
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if(item.date != "") {
+                        Text(
+                            text = item.date,
+                            fontSize = 11.sp,
+                            modifier = Modifier
+                                .weight(0.3F),
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            textAlign = TextAlign.End
+                        )
+                    }
+                }
+                if (item.location.name != ""){
+                    Row(
+                        modifier = Modifier.padding(3.dp).fillMaxWidth().weight(0.5F),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Filled.LocationOn, "location", modifier = Modifier.padding(3.dp))
+                        Text(
+                            text = item.location.name,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }else{
+                    Spacer(modifier = Modifier.weight(0.5F))
+                }
+
+
             }
 
             Box(modifier = Modifier.weight(0.1F)){
                 IconButton(
                     onClick = { expanded = !expanded },
-                    modifier = Modifier
-                        .padding(horizontal = 3.dp, vertical = 12.dp),
                     colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.secondary),
                 ) {
                     Icon(Icons.Filled.MoreVert, "More")

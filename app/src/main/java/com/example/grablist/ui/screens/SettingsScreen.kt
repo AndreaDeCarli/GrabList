@@ -77,8 +77,8 @@ fun SettingsScreen(
     val ctx = LocalContext.current
 
     val cameraLauncher = rememberCameraLauncher(
-        onPictureTaken = {
-                imageUri -> settingsViewModel.setProfilePicUri(imageUri)
+        onPictureTaken = { imageUri ->
+            settingsViewModel.setProfilePicUri(imageUri)
             saveImageToStorage(imageUri, ctx.contentResolver)
         }
     )

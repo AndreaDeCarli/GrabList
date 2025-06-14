@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -83,7 +85,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
     val scope = rememberCoroutineScope()
     fun setNameFromLocation(location: Location) = scope.launch {
         val place = osmDataSource.getPlace(location).displayName.split(",")
-        val realName = "${place[0]},${place[3]}"
+        val realName = "${place[0]},${place[2]}"
         actions.setLocationName(realName)
     }
 
@@ -184,27 +186,28 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
             var selected by remember { mutableIntStateOf(0) }
             val imagesIds = listOf(R.drawable.sprite0, R.drawable.sprite1,R.drawable.sprite2,R.drawable.sprite3,R.drawable.sprite4, R.drawable.sprite5,R.drawable.sprite6,R.drawable.sprite7)
             actions.setIcon(imagesIds[selected].toLong())
-            LazyRow() {
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth(),
+                columns = GridCells.Fixed(4)
+            ) {
                 items(imagesIds.size){
                     if (it == selected){
                         Image(
                             painter = painterResource(imagesIds[it]),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .padding(horizontal = 6.dp)
-                                .size(85.dp)
+                                .padding(6.dp)
+                                .size(80.dp)
                                 .selectable(
                                     selected = selected == it,
                                     onClick = {
                                         selected = it;actions.setIcon(imagesIds[it].toLong())
                                     })
-                                .border(
-                                    3.dp,
-                                    MaterialTheme.colorScheme.secondary,
-                                    RoundedCornerShape(10.dp)
-                                )
                                 .clip(RoundedCornerShape(10.dp))
                                 .background(MaterialTheme.colorScheme.tertiary)
+                                .padding(5.dp)
                             ,
                             contentDescription = "ShoppingIcon",
                         )
@@ -213,7 +216,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                             painter = painterResource(imagesIds[it]),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .padding(horizontal = 5.dp)
+                                .padding(6.dp)
                                 .size(80.dp)
                                 .selectable(
                                     selected = selected == it,

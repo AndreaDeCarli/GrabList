@@ -121,7 +121,7 @@ fun ShopListDetailsScreen(
             Surface (
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(if (showMap) 130.dp else 100.dp)
                     .fillMaxWidth()
 
             ) {
@@ -140,16 +140,16 @@ fun ShopListDetailsScreen(
                         if (shopList.location.name != ""){
                             Text(text = shopList.location.name,
                                 overflow = TextOverflow.Ellipsis,
-                                maxLines = 1)
+                                maxLines = if (showMap) 2 else 1)
                         }else{
                             Text(text = shopList.title,
                                 overflow = TextOverflow.Ellipsis,
-                                maxLines = 1)
+                                maxLines = if (showMap) 2 else 1)
                         }
                         if (shopList.date != ""){
                             Text(text = shopList.date,
                                 overflow = TextOverflow.Ellipsis,
-                                maxLines = 1)
+                                maxLines = if (showMap) 2 else 1)
                         }
 
                     }

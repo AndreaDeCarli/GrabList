@@ -33,7 +33,7 @@ class ShopListRepository(
         val productsInShopList = productDao.getProductsByListId(shopList.shopListId)
         val references = crossRefDao.getCrossRefById(shopList.shopListId)
         productsInShopList.first().forEach {it -> if (!it.favorite) {
-            productDao.delete(it)
+            deleteProduct(it)
         }}
 
         references.first().forEach{it -> crossRefDao.delete(it)}
