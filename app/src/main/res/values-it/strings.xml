@@ -44,4 +44,6 @@
     <string name="settings_title_progress">Progresso Medaglie</string>
     <string name="settings_title_pic">Foto Profilo</string>
     <string name="delete_pic">Elimina Foto</string>
+    <string name="add_location">Aggiungi posizione</string>
+    <string name="no_gps_title">Il GPS non è attivo</string>
 </resources>

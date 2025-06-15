@@ -6,6 +6,7 @@ import com.example.grablist.data.database.ShopList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.maplibre.android.style.light.Position
 
 
 data class AddShopListState(
@@ -17,7 +18,10 @@ data class AddShopListState(
     val latitude: Double = 0.0,
 
     val showPermissionAlert: Boolean = false,
-    val saveInCalender: Boolean = false
+    val showNoGPSAlert: Boolean = false,
+    val saveInCalender: Boolean = false,
+    val usePosition: Boolean = false,
+    val currentPosition: Location = Location()
 
     ) {
     val canSubmit get() = title.isNotBlank() && iconId != 0L
@@ -43,7 +47,10 @@ interface AddShopListActions {
     fun setLatitude(number: Double)
 
     fun setShowPermissionAlert(value: Boolean)
+    fun setShowNoGPSAlert(value: Boolean)
     fun setSaveInCalender(value: Boolean)
+    fun setUsePosition(value: Boolean)
+    fun setCurrentLocation(location: Location)
 }
 
 class AddShopListViewModel : ViewModel() {
@@ -75,5 +82,13 @@ class AddShopListViewModel : ViewModel() {
         override fun setLatitude(number: Double) =
             _state.update { it.copy(latitude = number) }
 
+        override fun setUsePosition(value: Boolean) =
+            _state.update { it.copy(usePosition = value) }
+
+        override fun setCurrentLocation(location: Location) =
+            _state.update { it.copy(currentPosition = location) }
+
+        override fun setShowNoGPSAlert(value: Boolean) =
+            _state.update { it.copy(showNoGPSAlert = value) }
     }
 }

@@ -44,4 +44,6 @@
     <string name="settings_title_progress">Badges Progress</string>
     <string name="settings_title_pic">Profile Picture</string>
     <string name="delete_pic">Delete Picture</string>
+    <string name="add_location">Add Location</string>
+    <string name="no_gps_title">GPS is not active</string>
 </resources>

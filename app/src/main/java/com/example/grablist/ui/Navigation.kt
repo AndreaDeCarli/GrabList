@@ -59,7 +59,7 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
         startDestination = NavRoute.HomeScreen
     ) {
         composable<NavRoute.HomeScreen> {
-            HomeScreen(navController, shopListVm, shopListState)
+            HomeScreen(navController, {shopList -> shopListVm.deleteShopList(shopList)}, shopListState)
         }
 
         composable<NavRoute.ShopListDetails> { backStackEntry ->

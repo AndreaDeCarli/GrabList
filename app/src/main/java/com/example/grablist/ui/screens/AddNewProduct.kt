@@ -111,6 +111,13 @@ fun AddNewProduct (
         }
     }
 
+    val buttonColors = ButtonColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        disabledContainerColor = MaterialTheme.colorScheme.inverseSurface,
+        disabledContentColor = MaterialTheme.colorScheme.inverseOnSurface
+    )
+
     Scaffold (
         topBar = { MainTopAppBar(navController, stringResource(id = R.string.new_product_title), true) },
         floatingActionButton = { FloatingActionButton(
@@ -163,8 +170,8 @@ fun AddNewProduct (
                     colors = IconToggleButtonColors(
                         containerColor = MaterialTheme.colorScheme.background,
                         contentColor = MaterialTheme.colorScheme.onBackground,
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        disabledContentColor = MaterialTheme.colorScheme.background,
+                        disabledContainerColor = MaterialTheme.colorScheme.inverseSurface,
+                        disabledContentColor = MaterialTheme.colorScheme.inverseOnSurface,
                         checkedContainerColor = MaterialTheme.colorScheme.primary,
                         checkedContentColor = MaterialTheme.colorScheme.onPrimary
                     )
@@ -191,12 +198,7 @@ fun AddNewProduct (
                     }else{
                         cameraLauncher.captureImage()
                     } },
-                colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContainerColor = MaterialTheme.colorScheme.tertiary,
-                    disabledContentColor = MaterialTheme.colorScheme.onSecondary
-                )
+                colors = buttonColors
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.take_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
@@ -212,12 +214,7 @@ fun AddNewProduct (
                 onClick = {
                     launcher.launch("image/*")
                 },
-                colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledContainerColor = MaterialTheme.colorScheme.tertiary,
-                    disabledContentColor = MaterialTheme.colorScheme.onSecondary
-                )
+                colors = buttonColors
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.select_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)

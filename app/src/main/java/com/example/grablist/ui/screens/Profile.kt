@@ -127,12 +127,12 @@ fun Profile(navController: NavController,
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = "information",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        tint = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier.weight(0.15F)
                     )
                     Text(
                         text = stringResource(R.string.progress_info),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier.weight(0.85F)
                     )
                 }
@@ -149,12 +149,12 @@ fun ProfileEntry(
     text: String,
     value: Int?
 ){
-    HorizontalDivider(thickness = 2.dp)
+    HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.inverseOnSurface)
     Text(
         text = "${text}: $value",
         textAlign = TextAlign.Center,
         modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
         fontSize = 20.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
+        color = MaterialTheme.colorScheme.inverseOnSurface
     )
 }

@@ -32,5 +32,6 @@ val White = Color(0xFFFFFFFF)
 val DarkGrey = Color(0xFF1F1F1F)
 val MediumGrey = Color(0xFF424242)
 val LightGrey = Color(0xFF7C7C7C)
+val VeryLightGrey = Color(0xFFC5C5C5)
 val ErrorRed = Color(0xFFD32F2F)
 

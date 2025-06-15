@@ -6,29 +6,30 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.LocationOff
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,12 +64,12 @@ import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddShopListActions
 import com.example.grablist.ui.viewmodels.AddShopListState
 import com.example.grablist.utils.LocationPickerMap
+import com.example.grablist.utils.LocationService
 import com.example.grablist.utils.OSMDataSource
 import com.example.grablist.utils.PermissionStatus
 import com.example.grablist.utils.addCalendarEvent
 import com.example.grablist.utils.getPrimaryCalendarId
 import com.example.grablist.utils.rememberMultiplePermissions
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import java.text.SimpleDateFormat
@@ -81,6 +82,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
     val ctx = LocalContext.current
     var showMap by remember { mutableStateOf(false) }
     val osmDataSource = koinInject<OSMDataSource>()
+    val locationService = remember { LocationService(ctx) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     fun setNameFromLocation(location: Location) = scope.launch {
@@ -89,7 +92,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
         actions.setLocationName(realName)
     }
 
-    val permissions = rememberMultiplePermissions(
+
+    val calendarPermission = rememberMultiplePermissions(
         listOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)
     ) { statuses ->
         when {
@@ -99,7 +103,42 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
             statuses.all { it.value == PermissionStatus.PermanentlyDenied } ->
                 actions.setShowPermissionAlert(true)
         }
+
     }
+
+    val positionPermission = rememberMultiplePermissions(
+        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+    ) { statuses ->
+        when {
+            statuses.any { it.value == PermissionStatus.Granted } -> {
+                actions.setUsePosition(true)
+            }
+            statuses.all { it.value == PermissionStatus.PermanentlyDenied } ->
+                actions.setShowPermissionAlert(true)
+        }
+    }
+
+    fun getCurrentLocation() = scope.launch {
+        if (positionPermission.statuses.none { it.value.isGranted }){
+            positionPermission.launchPermissionRequest()
+            return@launch
+        }
+        val tmp = try {
+            locationService.getCurrentLocation() ?: return@launch
+        }catch (_:IllegalStateException){
+            actions.setShowNoGPSAlert(true)
+            return@launch
+        }
+        actions.setCurrentLocation(tmp)
+        showMap = true
+    }
+
+    val buttonColors = ButtonColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        disabledContainerColor = MaterialTheme.colorScheme.inverseSurface,
+        disabledContentColor = MaterialTheme.colorScheme.inverseOnSurface
+    )
 
     Scaffold (
         topBar = { MainTopAppBar(navController, stringResource(id = R.string.new_list_title), true) },
@@ -125,152 +164,195 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
         } }
     ) { innerPadding ->
 
+        var showDatePicker by remember { mutableStateOf(false) }
+        var selected by remember { mutableIntStateOf(0) }
+        val imagesIds = listOf(R.drawable.sprite0, R.drawable.sprite1,R.drawable.sprite2,R.drawable.sprite3,R.drawable.sprite4, R.drawable.sprite5,R.drawable.sprite6,R.drawable.sprite7)
 
-        Column (
+        LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            var showDatePicker by remember { mutableStateOf(false) }
-            OutlinedTextField(
-                onValueChange = actions::setTitle,
-                value = state.title,
-                label = { Text(stringResource(id = R.string.title_generic)) },
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth())
-
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically){
-                Button(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),
-                    onClick = {
-                        showDatePicker = true
-                    }
-                ) {
-                    Text(stringResource(R.string.select_date))
-                    Icon(Icons.Filled.CalendarMonth, "Calendar")
-                }
-                Text(text = state.date, modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),)
+            item {
+                OutlinedTextField(
+                    onValueChange = actions::setTitle,
+                    value = state.title,
+                    label = { Text(stringResource(id = R.string.title_generic)) },
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .fillMaxWidth()
+                )
             }
-
-            Row (modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-            ){
-                Checkbox(
-                    enabled = state.date != "",
-                    checked = state.saveInCalender,
-                    onCheckedChange = {
-                        if (!state.saveInCalender) {
-                            permissions.launchPermissionRequest()
+            item {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically){
+                    Button(
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),
+                        onClick = {
+                            showDatePicker = true
+                        },
+                        colors = buttonColors
+                    ) {
+                        Text(stringResource(R.string.select_date))
+                        Icon(Icons.Filled.CalendarMonth, "Calendar")
+                    }
+                    Text(text = state.date, modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),)
+                }
+            }
+            item {
+                Row (modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Checkbox(
+                        enabled = state.date != "",
+                        checked = state.saveInCalender,
+                        onCheckedChange = {
+                            if (!state.saveInCalender) {
+                                calendarPermission.launchPermissionRequest()
+                            }else{
+                                actions.setSaveInCalender(false)
+                            }
+                        }
+                    )
+                    Text(stringResource(R.string.add_to_calendar))
+                }
+            }
+            item {
+                if (showDatePicker){
+                    DatePickerModal(
+                        onDismiss = { showDatePicker = false },
+                        onDateSelected = { millis ->
+                            actions.setDate(convertMillisToDate(requireNotNull(millis)))
+                            showDatePicker = false})
+                }
+            }
+            item {
+                actions.setIcon(imagesIds[selected].toLong())
+                LazyHorizontalGrid(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    rows = GridCells.Fixed(2),
+                ) {
+                    items(imagesIds.size){
+                        if (it == selected){
+                            Image(
+                                painter = painterResource(imagesIds[it]),
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                                    .size(80.dp)
+                                    .selectable(
+                                        selected = selected == it,
+                                        onClick = {
+                                            selected = it;actions.setIcon(imagesIds[it].toLong())
+                                        })
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(MaterialTheme.colorScheme.tertiary)
+                                    .padding(5.dp)
+                                ,
+                                contentDescription = "ShoppingIcon",
+                            )
                         }else{
-                            actions.setSaveInCalender(false)
+                            Image(
+                                painter = painterResource(imagesIds[it]),
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                                    .size(80.dp)
+                                    .selectable(
+                                        selected = selected == it,
+                                        onClick = {
+                                            selected = it;actions.setIcon(imagesIds[it].toLong())
+                                        })
+                                    .clip(RoundedCornerShape(20.dp)),
+                                contentDescription = "ShoppingIcon"
+                            )
                         }
                     }
-                )
-                Text(stringResource(R.string.add_to_calendar))
+                }
             }
-
-            if (showDatePicker){
-                DatePickerModal(
-                    onDismiss = { showDatePicker = false },
-                    onDateSelected = { millis ->
-                        actions.setDate(convertMillisToDate(requireNotNull(millis)))
-                        showDatePicker = false})
-            }
-
-            var selected by remember { mutableIntStateOf(0) }
-            val imagesIds = listOf(R.drawable.sprite0, R.drawable.sprite1,R.drawable.sprite2,R.drawable.sprite3,R.drawable.sprite4, R.drawable.sprite5,R.drawable.sprite6,R.drawable.sprite7)
-            actions.setIcon(imagesIds[selected].toLong())
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth(),
-                columns = GridCells.Fixed(4)
-            ) {
-                items(imagesIds.size){
-                    if (it == selected){
-                        Image(
-                            painter = painterResource(imagesIds[it]),
-                            contentScale = ContentScale.Crop,
+            item {
+                Button(
+                    enabled = !showMap,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),
+                    onClick = {
+                        scope.launch {
+                            isLoading = true
+                            getCurrentLocation().join()
+                            isLoading = false
+                        }
+                    },
+                    colors = buttonColors
+                ) {
+                    Text(text = stringResource(R.string.add_location))
+                    if (isLoading){
+                        CircularProgressIndicator(
                             modifier = Modifier
-                                .padding(6.dp)
-                                .size(80.dp)
-                                .selectable(
-                                    selected = selected == it,
-                                    onClick = {
-                                        selected = it;actions.setIcon(imagesIds[it].toLong())
-                                    })
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(MaterialTheme.colorScheme.tertiary)
-                                .padding(5.dp)
-                            ,
-                            contentDescription = "ShoppingIcon",
-                        )
+                                .size(25.dp)
+                                .padding(5.dp),
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            strokeWidth = 2.dp)
                     }else{
-                        Image(
-                            painter = painterResource(imagesIds[it]),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .size(80.dp)
-                                .selectable(
-                                    selected = selected == it,
-                                    onClick = {
-                                        selected = it;actions.setIcon(imagesIds[it].toLong())
-                                    })
-                                .clip(RoundedCornerShape(20.dp)),
-                            contentDescription = "ShoppingIcon"
-                        )
+                        Icon(Icons.Outlined.Map, "map")
                     }
                 }
             }
-            Button(
-                enabled = !showMap,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp),
-                onClick = { showMap = !showMap }
-            ) {
-                Text(text = "Add Location")
-                Icon(Icons.Outlined.Map, "map")
+            item {
+                if (showMap){
+                    LocationPickerMap(
+                        modifier = Modifier
+                            .height(400.dp)
+                            .padding(12.dp)
+                            .fillMaxWidth(),
+                        onLocationSelected = {
+                            actions.setLatitude(it.latitude)
+                            actions.setLongitude(it.longitude)
+                            setNameFromLocation(Location("", it.longitude, it.latitude))
+                        },
+                        currentLocation = state.currentPosition
+                    )
+                }
             }
+            item { Spacer(modifier = Modifier.height(150.dp)) }
+        }
+        if (state.showNoGPSAlert){
+            GenericAlertDialog(
+                title = "GPS is not active",
+                text = "GPS is not active and the app can't get the users position. Go to settings?",
+                confirmText = stringResource(R.string.confirm),
+                confirmAction = {
+                    locationService.openLocationSettings()
+                    actions.setShowNoGPSAlert(false) },
+                dismissText = stringResource(R.string.dismiss),
+                dismissAction = { actions.setShowNoGPSAlert(false) },
+                onDismissRequest = { actions.setShowNoGPSAlert(false) },
+                icon = Icons.Filled.LocationOff
+            )
+        }
 
-            if (showMap){
-                LocationPickerMap(
-                    modifier = Modifier
-                        .height(300.dp)
-                        .padding(20.dp)
-                        .fillMaxWidth(),
-                    onLocationSelected = {
-                        actions.setLatitude(it.latitude)
-                        actions.setLongitude(it.longitude)
-                        setNameFromLocation(Location("", it.longitude, it.latitude))
-                    }
-                )
-            }
+        if (state.showPermissionAlert){
+            GenericAlertDialog(
+                title = stringResource(R.string.permissions_title),
+                text = stringResource(R.string.permissions_text),
+                confirmText = stringResource(R.string.confirm),
+                confirmAction = {
+                    ctx.startActivity(
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", ctx.packageName, null)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK })
 
-
-            if (state.showPermissionAlert){
-                GenericAlertDialog(
-                    title = stringResource(R.string.permissions_title),
-                    text = stringResource(R.string.permissions_text),
-                    confirmText = stringResource(R.string.confirm),
-                    confirmAction = {
-                        ctx.startActivity(
-                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                data = Uri.fromParts("package", ctx.packageName, null)
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK })
-
-                        actions.setShowPermissionAlert(false)},
-                    dismissText = stringResource(R.string.dismiss),
-                    dismissAction = { actions.setShowPermissionAlert(false) },
-                    onDismissRequest = { actions.setShowPermissionAlert(false) },
-                    icon = Icons.Filled.Error
-                )
-            }
+                    actions.setShowPermissionAlert(false)},
+                dismissText = stringResource(R.string.dismiss),
+                dismissAction = { actions.setShowPermissionAlert(false) },
+                onDismissRequest = { actions.setShowPermissionAlert(false) },
+                icon = Icons.Filled.Error
+            )
         }
     }
 }

@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +62,7 @@ import com.example.grablist.ui.viewmodels.ShopListViewModel
 fun LazyShopListColumn(
     navController: NavController,
     state: ShopListState,
-    vm: ShopListViewModel,
+    onDelete: (shopList: ShopList) -> Unit,
 
 ){
     if (state.shopLists.isNotEmpty()){
@@ -69,7 +70,7 @@ fun LazyShopListColumn(
             items(state.shopLists) {item ->
                 ShoppingListCard(
                     item = item,
-                    vm = vm,
+                    onDelete = onDelete,
                     onClick = { navController.navigate(NavRoute.ShopListDetails(item.shopListId)) })
             }
             item { Spacer(modifier = Modifier.height(75.dp)) }
@@ -92,7 +93,7 @@ fun LazyShopListColumn(
 //}
 
 @Composable
-fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit) {
+fun ShoppingListCard(item: ShopList, onDelete: (shopList: ShopList) -> Unit, onClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var showAlert by remember { mutableStateOf(false) }
     Card(
@@ -153,7 +154,8 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                             modifier = Modifier
                                 .weight(0.3F),
                             color = MaterialTheme.colorScheme.onSecondary,
-                            textAlign = TextAlign.End
+                            textAlign = TextAlign.End,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -203,8 +205,11 @@ fun ShoppingListCard(item: ShopList, vm: ShopListViewModel, onClick: () -> Unit)
                     title = stringResource(R.string.delete_shoplist_dialog_title),
                     text = stringResource(R.string.delete_shoplist_dialog_text),
                     confirmText = stringResource(R.string.confirm),
-                    confirmAction = { vm.deleteShopList(item)
-                                    showAlert = false},
+                    confirmAction =
+                    {
+                        onDelete(item)
+                        showAlert = false
+                    },
                     dismissText = stringResource(R.string.dismiss),
                     dismissAction = { showAlert = false },
                     onDismissRequest = { showAlert = false },

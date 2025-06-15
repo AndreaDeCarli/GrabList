@@ -6,9 +6,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 data class Location(
-    val name: String,
-    val longitude: Double,
-    val latitude: Double
+    val name: String = "",
+    val longitude: Double = 0.0,
+    val latitude: Double = 0.0
 )
 
 @Entity

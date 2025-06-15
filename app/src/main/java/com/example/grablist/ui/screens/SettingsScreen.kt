@@ -283,10 +283,10 @@ fun CustomDivider(text: String) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(5.dp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            color = MaterialTheme.colorScheme.inverseOnSurface)
         HorizontalDivider(
             modifier = Modifier.padding(vertical = 10.dp),
             thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant)
+            color = MaterialTheme.colorScheme.inverseOnSurface)
     }
 }
