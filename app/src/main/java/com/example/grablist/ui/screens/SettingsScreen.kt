@@ -8,31 +8,34 @@ import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.border
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -46,15 +49,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.grablist.R
 import com.example.grablist.data.database.Theme
+import com.example.grablist.ui.composables.CustomDivider
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.SettingsState
@@ -149,7 +158,7 @@ fun SettingsScreen(
 
         LazyColumn(
             modifier = Modifier.padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
                 CustomDivider(stringResource(R.string.settings_title_name))
@@ -159,11 +168,13 @@ fun SettingsScreen(
                     label = { Text(stringResource(id = R.string.name_generic)) },
                     modifier = Modifier
                         .padding(12.dp)
-                        .fillMaxWidth())
-
+                        .fillMaxWidth()
+                )
+                CustomDescription(R.string.settings_desc_name)
             }
             item {
                 CustomDivider(stringResource(R.string.settings_title_theme))
+
                 Row(Modifier.selectableGroup()) {
                     Theme.entries.forEach { theme ->
                         Row(
@@ -189,11 +200,15 @@ fun SettingsScreen(
                         }
                     }
                 }
+                CustomDescription(R.string.settings_desc_theme)
             }
             item {
                 CustomDivider(stringResource(R.string.settings_title_progress))
+
                 Row(
-                    modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -204,62 +219,91 @@ fun SettingsScreen(
                         Text(text = stringResource(R.string.reset_progress))
                     }
                 }
+                CustomDescription(R.string.settings_desc_progress)
 
             }
             item {
                 CustomDivider(stringResource(R.string.settings_title_pic))
-                Button(
-                    enabled = state.profilePicUri == Uri.EMPTY,
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .size(width = 220.dp, height = 40.dp),
-                    onClick = {
-                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P){
-                            permissions.launchPermissionRequest()
-                            if (permissions.statuses[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PermissionStatus.Granted){
-                                cameraLauncher.captureImage()
+                Row(modifier = Modifier.height(170.dp).padding(vertical = 15.dp).fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Column (
+                        modifier = Modifier.weight(0.6F).fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Button(
+                            enabled = state.profilePicUri == Uri.EMPTY,
+                            modifier = Modifier
+                                .size(width = 220.dp, height = 40.dp),
+                            onClick = {
+                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P){
+                                    permissions.launchPermissionRequest()
+                                    if (permissions.statuses[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PermissionStatus.Granted){
+                                        cameraLauncher.captureImage()
+                                    }
+                                }else{
+                                    cameraLauncher.captureImage()
+                                } },
+                            colors = buttonColors
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(stringResource(R.string.take_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                                Icon(Icons.Filled.CameraAlt, "camera", modifier = Modifier.weight(0.2F))
                             }
-                        }else{
-                            cameraLauncher.captureImage()
-                        } },
-                    colors = buttonColors
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.take_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
-                        Icon(Icons.Filled.CameraAlt, "camera", modifier = Modifier.weight(0.2F))
+                        }
+                        Button(
+                            enabled = state.profilePicUri == Uri.EMPTY,
+                            modifier = Modifier
+                                .size(width = 220.dp, height = 40.dp),
+                            onClick = {
+                                launcher.launch("image/*")
+                            },
+                            colors = buttonColors
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(stringResource(R.string.select_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                                Icon(Icons.Filled.Upload, "search", modifier = Modifier.weight(0.2F))
+                            }
+                        }
+                        Button(
+                            enabled = state.profilePicUri != Uri.EMPTY,
+                            modifier = Modifier
+                                .size(width = 220.dp, height = 40.dp),
+                            onClick = {
+                                deleteImageFromFiles(ctx, state.profilePicUri)
+                                settingsViewModel.setProfilePicUri(Uri.EMPTY)
+                            },
+                            colors = buttonColors
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(stringResource(R.string.delete_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
+                                Icon(Icons.Filled.Delete, "search", modifier = Modifier.weight(0.2F))
+                            }
+                        }
+                    }
+                    Box(
+                        modifier = Modifier.weight(0.4F).padding(horizontal = 10.dp).size(170.dp),
+                        contentAlignment = Alignment.TopEnd,
+                    ) {
+                        if (state.profilePicUri != Uri.EMPTY) {
+                            AsyncImage(
+                                state.profilePicUri,
+                                contentDescription = "deca",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.shadow(3.dp, RoundedCornerShape(20.dp)).clip(RoundedCornerShape(20.dp)).fillMaxSize(),
+                            )
+                        } else {
+                            Image(
+                                imageVector = Icons.Filled.AccountCircle,
+                                contentDescription = "ProfileImage",
+                                modifier = Modifier.fillMaxSize(),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                            )
+                        }
                     }
                 }
-                Button(
-                    enabled = state.profilePicUri == Uri.EMPTY,
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .size(width = 220.dp, height = 40.dp),
-                    onClick = {
-                        launcher.launch("image/*")
-                    },
-                    colors = buttonColors
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.select_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
-                        Icon(Icons.Filled.Upload, "search", modifier = Modifier.weight(0.2F))
-                    }
-                }
-                Button(
-                    enabled = state.profilePicUri != Uri.EMPTY,
-                    modifier = Modifier
-                        .padding(vertical = 10.dp)
-                        .size(width = 220.dp, height = 40.dp),
-                    onClick = {
-                        deleteImageFromFiles(ctx, state.profilePicUri)
-                        settingsViewModel.setProfilePicUri(Uri.EMPTY)
-                    },
-                    colors = buttonColors
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(stringResource(R.string.delete_pic), modifier = Modifier.weight(0.8F), textAlign = TextAlign.Center)
-                        Icon(Icons.Filled.Delete, "search", modifier = Modifier.weight(0.2F))
-                    }
-                }
+
+                CustomDescription(R.string.settings_desc_pic)
             }
             item { Spacer(modifier = Modifier.height(100.dp)) }
         }
@@ -269,24 +313,24 @@ fun SettingsScreen(
 
 
 @Composable
-fun CustomDivider(text: String) {
+fun CustomDescription(stringId: Int){
     Row(
-        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 5.dp)
     ) {
-//        HorizontalDivider(
-//            modifier = Modifier.width(12.dp).padding(vertical = 10.dp),
-//            thickness = 1.dp,
-//            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(
+            imageVector = Icons.Outlined.Info,
+            contentDescription = "information",
+            tint = MaterialTheme.colorScheme.inverseOnSurface,
+            modifier = Modifier.weight(0.10F)
+        )
         Text(
-            text = text,
-            textAlign = TextAlign.Center,
+            text = stringResource(stringId),
             modifier = Modifier
-                .padding(5.dp),
-            color = MaterialTheme.colorScheme.inverseOnSurface)
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.inverseOnSurface)
+                .weight(0.90F),
+            color = MaterialTheme.colorScheme.inverseOnSurface,
+            fontSize = 12.sp,
+            lineHeight = 14.sp
+        )
     }
 }

@@ -40,7 +40,7 @@ fun ActiveShoppingScreen (
     navController: NavController,
     state: ProductsInListState,
     shopList: ShopList,
-    settingsViewModel: SettingsViewModel
+    onCompleteList: () -> Unit
     ) {
 
     var showQuitAlert by remember { mutableStateOf(false) }
@@ -68,7 +68,7 @@ fun ActiveShoppingScreen (
             navController = navController,
             state = state,
             modifier = Modifier.padding(innerPadding),
-            settingsViewModel = settingsViewModel)
+            onCompleteList = onCompleteList)
 
         if (showQuitAlert){
             GenericAlertDialog(

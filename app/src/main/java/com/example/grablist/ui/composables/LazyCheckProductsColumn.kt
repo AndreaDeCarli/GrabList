@@ -16,22 +16,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -52,15 +45,13 @@ import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Product
 import com.example.grablist.ui.viewmodels.ProductsInListState
-import com.example.grablist.ui.viewmodels.SettingsViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LazyCheckProductsColumn(
     navController: NavController,
     state: ProductsInListState,
     modifier: Modifier,
-    settingsViewModel: SettingsViewModel
+    onCompleteList: ()-> Unit
 ) {
     var counter by remember { mutableIntStateOf(0) }
     val checked = remember { mutableStateListOf<Boolean>() }
@@ -121,8 +112,9 @@ fun LazyCheckProductsColumn(
                 confirmText = stringResource(R.string.confirm),
                 confirmAction = {
                     showCompletedDialog = false
-                    settingsViewModel.increaseProgress()
-                    settingsViewModel.setLatestProgressDate()
+
+                    onCompleteList()
+
                     navController.navigateUp()
                 },
                 onDismissRequest = { },
@@ -183,9 +175,15 @@ fun CheckProductItem(product: Product, counter: () -> Unit, checked: Boolean){
                 modifier = Modifier.weight(0.60F)
             ) {
                 if (checked){
-                    Text(text = product.name, fontSize = 18.sp, textDecoration = TextDecoration.LineThrough, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        text = product.name,
+                        fontSize = 18.sp,
+                        textDecoration = TextDecoration.LineThrough,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }else{
-                    Text(text = product.name, fontSize = 18.sp)
+                    Text(
+                        text = product.name,
+                        fontSize = 18.sp)
                 }
             }
             Box(

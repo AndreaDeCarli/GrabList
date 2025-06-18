@@ -89,9 +89,9 @@ fun ProductCard(
     var expanded by remember { mutableStateOf(false) }
 
     val menuItemsColors = MenuItemColors(
-        textColor = MaterialTheme.colorScheme.onPrimary,
-        leadingIconColor = MaterialTheme.colorScheme.onPrimary,
-        trailingIconColor = MaterialTheme.colorScheme.onPrimary,
+        textColor = MaterialTheme.colorScheme.onBackground,
+        leadingIconColor = MaterialTheme.colorScheme.onBackground,
+        trailingIconColor = MaterialTheme.colorScheme.onBackground,
         disabledTextColor = MaterialTheme.colorScheme.onPrimary,
         disabledLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
         disabledTrailingIconColor = MaterialTheme.colorScheme.onPrimary
@@ -165,23 +165,25 @@ fun ProductCard(
                         }
                         DropdownMenu(
                             expanded = expanded,
-                            onDismissRequest = { expanded = false }
+                            onDismissRequest = { expanded = false },
                         ) {
                             DropdownMenuItem(
-                                leadingIcon = { Icon(Icons.Filled.Delete, "delete", tint = MaterialTheme.colorScheme.onBackground) },
+                                leadingIcon = { Icon(Icons.Filled.Delete, "delete") },
                                 text = { Text(stringResource(R.string.remove_generic)) },
                                 onClick = {
                                     vm.deleteProduct(product, shopList)
                                     expanded = false
-                                }
+                                },
+                                colors = menuItemsColors
                             )
                             DropdownMenuItem(
-                                leadingIcon = { Icon(Icons.Filled.Favorite, "fav", tint = MaterialTheme.colorScheme.onBackground) },
+                                leadingIcon = { Icon(Icons.Filled.Favorite, "fav") },
                                 text = { Text(stringResource(R.string.favs_title)) },
                                 onClick = {
                                     vm.changeFavorite(product)
                                     expanded = false
-                                }
+                                },
+                                colors = menuItemsColors
                             )
                         }
                     }

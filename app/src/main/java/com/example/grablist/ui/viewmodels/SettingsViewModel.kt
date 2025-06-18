@@ -22,48 +22,50 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-data class SettingsState(val username: String, val theme: Theme, val progress: Int, val latestProgressDate: Long, val profilePicUri: Uri)
+data class SettingsState(
+    val username: String,
+    val theme: Theme,
+    val progress: Int,
+    val latestProgressDate: Long,
+    val profilePicUri: Uri
+)
 
 class SettingsViewModel(
     private val repository: SettingsRepository
 ) : ViewModel() {
-    var state by mutableStateOf(SettingsState("", Theme.System, 0, 0, Uri.EMPTY))
+    var state by mutableStateOf(SettingsState("", Theme.System, 0, 0, Uri.EMPTY, ))
         private set
 
     fun setUsername(username: String) {
-        state = SettingsState(username, state.theme, state.progress, state.latestProgressDate, state.profilePicUri)
+        state = state.copy(username = username)
         viewModelScope.launch {
             repository.setUsername(username)
         }
     }
 
     fun setTheme(theme: Theme) {
-        state = SettingsState(state.username, theme, state.progress,  state.latestProgressDate, state.profilePicUri)
+        state = state.copy(theme = theme)
         viewModelScope.launch {
             repository.setTheme(theme)
         }
     }
 
     fun increaseProgress() {
-        state = SettingsState(username = state.username, theme = state.theme, progress = state.progress+1,  state.latestProgressDate, state.profilePicUri)
+        state = state.copy(progress = state.progress+1)
         viewModelScope.launch {
             repository.increaseProgress()
         }
     }
 
     fun resetProgress() {
-        state = SettingsState(username = state.username, theme = state.theme, progress = 0,  state.latestProgressDate, state.profilePicUri)
+        state = state.copy(progress = 0)
         viewModelScope.launch {
             repository.resetProgress()
         }
     }
 
     fun setProfilePicUri(uri: Uri) {
-        state = SettingsState(username = state.username,
-            theme = state.theme,
-            progress = state.progress,
-            latestProgressDate = state.latestProgressDate,
-            profilePicUri = uri)
+        state = state.copy(profilePicUri = uri)
         viewModelScope.launch {
             repository.setProfilePicUri(uri)
         }
@@ -71,7 +73,7 @@ class SettingsViewModel(
 
     fun setLatestProgressDate(){
         val date = System.currentTimeMillis()
-        state = SettingsState(username = state.username, theme = state.theme, progress = state.progress,  date, state.profilePicUri)
+        state = state.copy(latestProgressDate = date)
         viewModelScope.launch {
             repository.setLatestProgressDate(date)
         }

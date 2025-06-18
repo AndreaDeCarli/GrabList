@@ -46,4 +46,11 @@
     <string name="delete_pic">Elimina Foto</string>
     <string name="add_location">Aggiungi posizione</string>
     <string name="no_gps_title">Il GPS non è attivo</string>
+    <string name="no_gps_text">Il GPS non è attivo e l\'app non può accedere alla posizione dell\'utente. Andare alle impostazioni?</string>
+    <string name="tier_check">Check</string>
+    <string name="tier_diamond">Diamante</string>
+    <string name="settings_desc_name">Cambia il nome che è visualizzato nella pagina del profilo</string>
+    <string name="settings_desc_theme">Cambia i colori dell\'applicazione</string>
+    <string name="settings_desc_progress">Ogni volta che completi una spesa questo contatore aumenta e vinci delle medaglie. Puoi resettare il progresso in qualunque momento.</string>
+    <string name="settings_desc_pic">Cambia l\'immagine che viene mostrata nella pagina del profilo.</string>
 </resources>

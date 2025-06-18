@@ -323,8 +323,8 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
         }
         if (state.showNoGPSAlert){
             GenericAlertDialog(
-                title = "GPS is not active",
-                text = "GPS is not active and the app can't get the users position. Go to settings?",
+                title = stringResource(R.string.no_gps_title),
+                text = stringResource(R.string.no_gps_text),
                 confirmText = stringResource(R.string.confirm),
                 confirmAction = {
                     locationService.openLocationSettings()

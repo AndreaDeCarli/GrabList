@@ -56,9 +56,8 @@ import com.example.grablist.ui.viewmodels.ShopListState
 fun Profile(navController: NavController,
             settingsState: SettingsState,
             shopListState: ShopListState,
-            productVm: ProductsViewModel){
+            productState: ProductState){
 
-    val productsFavorites by productVm.favorites.collectAsStateWithLifecycle()
     val tier: Tier = evaluateTier(settingsState.progress)
 
     Scaffold(
@@ -117,7 +116,7 @@ fun Profile(navController: NavController,
                 )
             }
             item { ProfileEntry(stringResource(R.string.home_title), shopListState.shopLists.size) }
-            item { ProfileEntry(stringResource(R.string.favs_title), productsFavorites.products.size) }
+            item { ProfileEntry(stringResource(R.string.favs_title), productState.products.size) }
             item { TierProgressBar(settingsState.progress) }
             item {
                 Row(

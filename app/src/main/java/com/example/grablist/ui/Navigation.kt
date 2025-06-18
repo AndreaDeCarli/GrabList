@@ -59,7 +59,7 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
         startDestination = NavRoute.HomeScreen
     ) {
         composable<NavRoute.HomeScreen> {
-            HomeScreen(navController, {shopList -> shopListVm.deleteShopList(shopList)}, shopListState)
+            HomeScreen(navController, { shopList -> shopListVm.deleteShopList(shopList) }, shopListState)
         }
 
         composable<NavRoute.ShopListDetails> { backStackEntry ->
@@ -83,7 +83,10 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
                 navController = navController,
                 state = state,
                 shopList = shopList,
-                settingsViewModel = settingsViewModel)
+                onCompleteList = {
+                    settingsViewModel.increaseProgress()
+                    settingsViewModel.setLatestProgressDate()
+                })
         }
 
         composable<NavRoute.ProductDetails> { backStackEntry ->
@@ -99,10 +102,11 @@ fun GrabListNavGraph(navController: NavHostController, settingsViewModel: Settin
         }
 
         composable<NavRoute.Profile> {
+            val productsFavorites by productVm.favorites.collectAsStateWithLifecycle()
             Profile(navController,
                 settingsState = settingsState,
                 shopListState = shopListState,
-                productVm = productVm)
+                productState = productsFavorites)
         }
 
         composable<NavRoute.AddNewList> {

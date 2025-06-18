@@ -1,13 +1,10 @@
 package com.example.grablist.ui.screens
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.SystemClock
-import android.provider.MediaStore
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,20 +13,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -37,9 +30,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.MaterialTheme
@@ -55,7 +45,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -66,8 +55,6 @@ import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddProductActions
 import com.example.grablist.ui.viewmodels.AddProductState
-import com.example.grablist.ui.viewmodels.AddShopListActions
-import com.example.grablist.ui.viewmodels.AddShopListState
 import com.example.grablist.utils.PermissionStatus
 import com.example.grablist.utils.rememberCameraLauncher
 import com.example.grablist.utils.rememberMultiplePermissions
@@ -230,8 +217,8 @@ fun AddNewProduct (
                     modifier = Modifier
                         .padding(12.dp)
                         .size(180.dp, 180.dp)
-                        .border(3.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
-                        .clip(RoundedCornerShape(12.dp))
+                        .border(3.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(30.dp))
+                        .clip(RoundedCornerShape(30.dp))
                 )
             }
         }

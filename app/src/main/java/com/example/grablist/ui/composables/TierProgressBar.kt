@@ -57,11 +57,11 @@ fun TierProgressBar(
                     modifier = Modifier
                         .weight(0.8F)
                         .height(10.dp),
-                    progress = { if (tier == Tier.Star) 1.0F else progress/tier.max.toFloat() },
+                    progress = { if (tier == Tier.Diamond) 1.0F else progress/tier.max.toFloat() },
                     color = MaterialTheme.colorScheme.tertiary,
                     strokeCap = StrokeCap.Round,
                 )
-                Text(text = "${progress}/${if (tier == Tier.Star) "-" else tier.max}",
+                Text(text = "${progress}/${if (tier == Tier.Diamond) "-" else tier.max}",
                     modifier = Modifier
                         .padding(10.dp)
                         .weight(0.2F),
@@ -80,7 +80,7 @@ fun TierProgressBar(
                         contentDescription = "currentTier",
                         modifier = Modifier.size(40.dp))
                 }
-                if (tier != Tier.Star){
+                if (tier != Tier.Diamond){
                     Text("${stringResource(R.string.next_generic)}: ${stringResource(nextTier.label)}")
                     Image(
                         painter = painterResource(nextTier.iconId),

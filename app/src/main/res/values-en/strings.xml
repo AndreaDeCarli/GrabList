@@ -46,4 +46,11 @@
     <string name="delete_pic">Delete Picture</string>
     <string name="add_location">Add Location</string>
     <string name="no_gps_title">GPS is not active</string>
+    <string name="no_gps_text">GPS is not active and the app can\'t access the user\'s location. Go to settings?</string>
+    <string name="tier_check">Check</string>
+    <string name="tier_diamond">Diamond</string>
+    <string name="settings_desc_name">Change the name that is displayed in the profile page</string>
+    <string name="settings_desc_theme">Change the colors of the app</string>
+    <string name="settings_desc_progress">With every time you complete a shopping list this counter increases and you win badges. You can reset this progress at any time.</string>
+    <string name="settings_desc_pic">Change the picture that is displayed in profile page.</string>
 </resources>
