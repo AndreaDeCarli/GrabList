@@ -25,6 +25,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CameraAlt
@@ -32,6 +33,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -42,6 +45,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +60,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +69,7 @@ import coil.compose.AsyncImage
 import com.example.grablist.R
 import com.example.grablist.data.database.Theme
 import com.example.grablist.ui.composables.CustomDivider
+import com.example.grablist.ui.composables.CustomTextField
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.SettingsState
@@ -83,6 +89,9 @@ fun SettingsScreen(
 ){
 
     var showPermissionAlert by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
+    var showResetDialog by remember { mutableStateOf(false) }
+
     val ctx = LocalContext.current
 
     val cameraLauncher = rememberCameraLauncher(
@@ -127,7 +136,12 @@ fun SettingsScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigateUp() },
+                    if (state.username != ""){
+                        navController.navigateUp()
+                    }else{
+                        showError = true
+                    }
+                          },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onBackground
@@ -162,14 +176,7 @@ fun SettingsScreen(
         ) {
             item {
                 CustomDivider(stringResource(R.string.settings_title_name))
-                OutlinedTextField(
-                    onValueChange = { settingsViewModel.setUsername(it) },
-                    value = state.username,
-                    label = { Text(stringResource(id = R.string.name_generic)) },
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                )
+                CustomTextField(state.username, { settingsViewModel.setUsername(it); showError = false }, showError)
                 CustomDescription(R.string.settings_desc_name)
             }
             item {
@@ -214,7 +221,8 @@ fun SettingsScreen(
                 ) {
                     Text(text = "${stringResource(R.string.completed_progress)}: ${state.progress}")
                     Button(
-                        onClick = { settingsViewModel.resetProgress() }
+                        enabled = state.progress != 0,
+                        onClick = { showResetDialog = true }
                     ) {
                         Text(text = stringResource(R.string.reset_progress))
                     }
@@ -224,10 +232,15 @@ fun SettingsScreen(
             }
             item {
                 CustomDivider(stringResource(R.string.settings_title_pic))
-                Row(modifier = Modifier.height(170.dp).padding(vertical = 15.dp).fillMaxWidth(),
+                Row(modifier = Modifier
+                    .height(170.dp)
+                    .padding(vertical = 15.dp)
+                    .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically) {
                     Column (
-                        modifier = Modifier.weight(0.6F).fillMaxHeight(),
+                        modifier = Modifier
+                            .weight(0.6F)
+                            .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceAround
                     ) {
@@ -282,15 +295,21 @@ fun SettingsScreen(
                         }
                     }
                     Box(
-                        modifier = Modifier.weight(0.4F).padding(horizontal = 10.dp).size(170.dp),
+                        modifier = Modifier
+                            .weight(0.4F)
+                            .padding(horizontal = 10.dp)
+                            .size(170.dp),
                         contentAlignment = Alignment.TopEnd,
                     ) {
                         if (state.profilePicUri != Uri.EMPTY) {
                             AsyncImage(
                                 state.profilePicUri,
-                                contentDescription = "deca",
+                                contentDescription = "profileImage",
                                 contentScale = ContentScale.Crop,
-                                modifier = Modifier.shadow(3.dp, RoundedCornerShape(20.dp)).clip(RoundedCornerShape(20.dp)).fillMaxSize(),
+                                modifier = Modifier
+                                    .shadow(3.dp, RoundedCornerShape(20.dp))
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .fillMaxSize(),
                             )
                         } else {
                             Image(
@@ -307,7 +326,20 @@ fun SettingsScreen(
             }
             item { Spacer(modifier = Modifier.height(100.dp)) }
         }
-
+        if (showResetDialog){
+            GenericAlertDialog(
+                title = stringResource(R.string.reset_progress),
+                text = stringResource(R.string.reset_progress_text),
+                confirmText = stringResource(R.string.confirm),
+                confirmAction = {
+                    settingsViewModel.resetProgress()
+                    showResetDialog = false },
+                dismissText = stringResource(R.string.dismiss),
+                dismissAction = { showResetDialog = false },
+                onDismissRequest = { showResetDialog = false },
+                icon = Icons.Filled.Warning
+            )
+        }
     }
 }
 

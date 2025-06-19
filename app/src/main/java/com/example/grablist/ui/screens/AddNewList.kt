@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Error
@@ -40,6 +41,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,10 +57,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Location
+import com.example.grablist.ui.composables.CustomTextField
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddShopListActions
@@ -84,6 +88,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
     val osmDataSource = koinInject<OSMDataSource>()
     val locationService = remember { LocationService(ctx) }
     var isLoading by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     fun setNameFromLocation(location: Location) = scope.launch {
@@ -146,7 +151,10 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onBackground,
             onClick = {
-                if (!state.canSubmit) return@FloatingActionButton
+                if (!state.canSubmit) {
+                    showError = true
+                    return@FloatingActionButton
+                }
                 onSubmit()
                 if (state.saveInCalender){
                     addCalendarEvent(date = state.date,
@@ -175,14 +183,7 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
                 .background(MaterialTheme.colorScheme.background)
         ) {
             item {
-                OutlinedTextField(
-                    onValueChange = actions::setTitle,
-                    value = state.title,
-                    label = { Text(stringResource(id = R.string.title_generic)) },
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                )
+                CustomTextField(state.title, { actions.setTitle(it); showError = false }, showError)
             }
             item {
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -203,20 +204,25 @@ fun AddNewList (state: AddShopListState, actions: AddShopListActions, onSubmit: 
             }
             item {
                 Row (modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .selectable(
+                        enabled = state.date != "",
+                        selected = state.saveInCalender,
+                        onClick = {
+                            if (!state.saveInCalender) {
+                                calendarPermission.launchPermissionRequest()
+                            } else {
+                                actions.setSaveInCalender(false)
+                            }
+                        })
+                    .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Checkbox(
                         enabled = state.date != "",
                         checked = state.saveInCalender,
-                        onCheckedChange = {
-                            if (!state.saveInCalender) {
-                                calendarPermission.launchPermissionRequest()
-                            }else{
-                                actions.setSaveInCalender(false)
-                            }
-                        }
+                        onCheckedChange = null,
+                        modifier = Modifier.padding(end = 10.dp)
                     )
                     Text(stringResource(R.string.add_to_calendar))
                 }

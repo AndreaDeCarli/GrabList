@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Error
@@ -36,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,11 +48,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.grablist.R
+import com.example.grablist.ui.composables.CustomTextField
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddProductActions
@@ -70,13 +74,13 @@ fun AddNewProduct (
     lockFavorites: Boolean,
     ctx: Context
 ){
-    var imageFound by remember { mutableStateOf(false) }
+
+    var showError by remember { mutableStateOf(false) }
 
     val cameraLauncher = rememberCameraLauncher(
         onPictureTaken = {
             imageUri -> actions.setImageUri(imageUri)
             saveImageToStorage(imageUri, ctx.contentResolver)
-            imageFound = true
         }
     )
 
@@ -85,7 +89,6 @@ fun AddNewProduct (
         ActivityResultContracts.GetContent()
     ) { imageUri: Uri? ->
             actions.setImageUri(requireNotNull(saveImageToInternalStorage(ctx, requireNotNull(imageUri))))
-            imageFound = true
     }
 
     val permissions = rememberMultiplePermissions(
@@ -111,7 +114,10 @@ fun AddNewProduct (
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onBackground,
             onClick = {
-                if (!state.canSubmit) return@FloatingActionButton
+                if (!state.canSubmit) {
+                    showError = true
+                    return@FloatingActionButton
+                }
                 onSubmit()
                 navController.navigateUp()
             },
@@ -132,13 +138,7 @@ fun AddNewProduct (
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            OutlinedTextField(
-                onValueChange = actions::setName,
-                value = state.name,
-                label = { Text(stringResource(id = R.string.title_generic)) },
-                modifier = Modifier
-                    .padding(12.dp)
-                    .fillMaxWidth())
+            CustomTextField(state.name, { actions.setName(it); showError = false }, showError)
 
             Row(
                 modifier = Modifier
@@ -172,7 +172,7 @@ fun AddNewProduct (
                 }
             }
             Button(
-                enabled = !imageFound,
+                enabled = state.imageUri == Uri.EMPTY,
                 modifier = Modifier
                     .padding(vertical = 10.dp)
                     .size(width = 220.dp, height = 40.dp),
@@ -194,7 +194,7 @@ fun AddNewProduct (
             }
 
             Button(
-                enabled = !imageFound,
+                enabled = state.imageUri == Uri.EMPTY,
                 modifier = Modifier
                     .padding(vertical = 10.dp)
                     .size(width = 220.dp, height = 40.dp),
@@ -209,7 +209,7 @@ fun AddNewProduct (
                 }
             }
 
-            if (imageFound){
+            if (state.imageUri != Uri.EMPTY){
                 AsyncImage(
                     model = state.imageUri,
                     contentDescription = "image",

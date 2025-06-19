@@ -85,7 +85,7 @@ fun Profile(navController: NavController,
                     if (settingsState.profilePicUri != Uri.EMPTY){
                         AsyncImage(
                             settingsState.profilePicUri,
-                            contentDescription = "deca",
+                            contentDescription = "profileImage",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.clip(CircleShape).fillMaxSize(),
                         )
