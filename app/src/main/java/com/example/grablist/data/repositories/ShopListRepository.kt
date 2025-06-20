@@ -32,11 +32,11 @@ class ShopListRepository(
     suspend fun deleteShopList(shopList: ShopList) {
         val productsInShopList = productDao.getProductsByListId(shopList.shopListId)
         val references = crossRefDao.getCrossRefById(shopList.shopListId)
-        productsInShopList.first().forEach {it -> if (!it.favorite) {
-            deleteProduct(it)
-        }}
-
         references.first().forEach{it -> crossRefDao.delete(it)}
+
+        productsInShopList.first().forEach {product -> if (!product.favorite && crossRef.first().find { it.productId == product.productId } == null) {
+            deleteProduct(product)
+        }}
 
         shopListDao.delete(shopList)
 
@@ -48,11 +48,7 @@ class ShopListRepository(
         if (references.isEmpty() && productToChange.favorite){
             deleteProduct(productToChange)
         }else{
-            val newProduct = Product(
-                productId = productToChange.productId,
-                name = productToChange.name,
-                imageUri = productToChange.imageUri,
-                favorite = !productToChange.favorite)
+            val newProduct = productToChange.copy(favorite = !productToChange.favorite)
             productDao.upsert(newProduct)
         }
     }
