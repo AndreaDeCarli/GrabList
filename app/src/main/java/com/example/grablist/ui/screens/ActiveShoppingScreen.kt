@@ -4,16 +4,12 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -25,14 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.grablist.R
-import com.example.grablist.data.database.Product
 import com.example.grablist.data.database.ShopList
 import com.example.grablist.ui.composables.GenericAlertDialog
 import com.example.grablist.ui.composables.LazyCheckProductsColumn
-import com.example.grablist.ui.viewmodels.ProductState
 import com.example.grablist.ui.viewmodels.ProductsInListState
-import com.example.grablist.ui.viewmodels.SettingsState
-import com.example.grablist.ui.viewmodels.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

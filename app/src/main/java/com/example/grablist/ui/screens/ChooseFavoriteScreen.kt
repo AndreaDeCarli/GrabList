@@ -12,11 +12,9 @@ import androidx.navigation.NavController
 import com.example.grablist.R
 import com.example.grablist.data.database.Product
 import com.example.grablist.data.database.ShopList
-import com.example.grablist.ui.NavRoute
 import com.example.grablist.ui.composables.LazyProductColumn
 import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.ProductsViewModel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.SystemClock
 import android.provider.MediaStore
 import java.io.File

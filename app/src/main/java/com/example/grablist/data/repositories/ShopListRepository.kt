@@ -66,12 +66,13 @@ class ShopListRepository(
     }
 
     suspend fun deleteProductFromList(product: Product, shopList: ShopList){
-        if (!product.favorite) {
-            deleteProduct(product)
-        }
         val crossRefToDelete = requireNotNull(
             crossRef.first().find { it.shopListId == shopList.shopListId && it.productId == product.productId })
         crossRefDao.delete(crossRefToDelete)
+
+        if (!product.favorite && crossRef.first().find { it.productId == product.productId } == null) {
+            deleteProduct(product)
+        }
     }
 
     suspend fun addProduct(product: Product) {

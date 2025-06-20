@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.CalendarContract
+import com.example.grablist.utils.CalendarVariables.Companion.oneDay
 import com.example.grablist.utils.CalendarVariables.Companion.oneHour
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -59,8 +60,9 @@ fun addCalendarEvent(
 
 
     val values = ContentValues().apply {
-        put(CalendarContract.Events.DTSTART, dateInMillis + oneHour * 14)
-        put(CalendarContract.Events.DTEND, dateInMillis + oneHour * 16)
+        put(CalendarContract.Events.DTSTART, dateInMillis + oneDay)
+        put(CalendarContract.Events.DTEND, dateInMillis + oneDay * 2)
+        put(CalendarContract.Events.ALL_DAY, 1)
         put(CalendarContract.Events.TITLE, title)
         put(CalendarContract.Events.DESCRIPTION, description)
         put(CalendarContract.Events.CALENDAR_ID, calendarId)

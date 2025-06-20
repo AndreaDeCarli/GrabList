@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Error
@@ -34,10 +34,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -60,6 +57,7 @@ import com.example.grablist.ui.composables.MainTopAppBar
 import com.example.grablist.ui.viewmodels.AddProductActions
 import com.example.grablist.ui.viewmodels.AddProductState
 import com.example.grablist.utils.PermissionStatus
+import com.example.grablist.utils.deleteImageFromFiles
 import com.example.grablist.utils.rememberCameraLauncher
 import com.example.grablist.utils.rememberMultiplePermissions
 import com.example.grablist.utils.saveImageToInternalStorage
@@ -108,8 +106,22 @@ fun AddNewProduct (
         disabledContentColor = MaterialTheme.colorScheme.inverseOnSurface
     )
 
+    BackHandler {
+        if (state.imageUri != Uri.EMPTY){
+            deleteImageFromFiles(ctx, state.imageUri)
+        }
+    }
+
     Scaffold (
-        topBar = { MainTopAppBar(navController, stringResource(id = R.string.new_product_title), true) },
+        topBar = { MainTopAppBar(navController = navController,
+            title = stringResource(id = R.string.new_product_title),
+            goBack = true,
+            additionalAction = {
+                if (state.imageUri != Uri.EMPTY){
+                    deleteImageFromFiles(ctx, state.imageUri)
+                }
+            })
+                 },
         floatingActionButton = { FloatingActionButton(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onBackground,

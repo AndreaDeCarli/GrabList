@@ -18,7 +18,7 @@
     <string name="delete_shoplist_dialog_text">This list will be permanently deleted from the app. Proceed?</string>
     <string name="delete_shoplist_dialog_title">Delete List</string>
     <string name="confirm">Confirm</string>
-    <string name="dismiss">Dismiss</string>
+    <string name="dismiss">Cancel</string>
     <string name="quit_shopping_text">All progress of this shopping will be lost, Confirm?</string>
     <string name="quit_shopping_title">Exit shopping</string>
     <string name="completed_shopping_title">Shopping Completed</string>
