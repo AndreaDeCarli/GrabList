@@ -1,5 +1,6 @@
 package com.example.grablist.ui.screens
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +44,9 @@ import com.example.grablist.ui.composables.TierProgressBar
 import com.example.grablist.ui.viewmodels.ProductState
 import com.example.grablist.ui.viewmodels.SettingsState
 import com.example.grablist.ui.viewmodels.ShopListState
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun Profile(navController: NavController,
@@ -71,7 +75,9 @@ fun Profile(navController: NavController,
         ) {
             item {
                 Box(
-                    modifier = Modifier.padding(12.dp).size(250.dp, 250.dp),
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .size(250.dp, 250.dp),
                     contentAlignment = Alignment.TopEnd,
                     ) {
                     if (settingsState.profilePicUri != Uri.EMPTY){
@@ -79,7 +85,9 @@ fun Profile(navController: NavController,
                             settingsState.profilePicUri,
                             contentDescription = "profileImage",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.clip(CircleShape).fillMaxSize(),
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .fillMaxSize(),
                         )
                     }else{
                         Image(
@@ -94,7 +102,9 @@ fun Profile(navController: NavController,
                         Image(
                             painter = painterResource(tier.iconId),
                             contentDescription = "tierImage",
-                            modifier = Modifier.padding(10.dp).size(65.dp))
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(65.dp))
                     }
 
                 }
@@ -103,17 +113,22 @@ fun Profile(navController: NavController,
                 Text(
                     text = settingsState.username,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 15.dp),
                     fontSize = 24.sp
                 )
             }
             item { ProfileEntry(stringResource(R.string.home_title), shopListState.shopLists.size) }
             item { ProfileEntry(stringResource(R.string.favs_title), productState.products.size) }
+            item { ProfileEntry(stringResource(R.string.latest_shopping), getDateFromMillis(settingsState.latestProgressDate) ) }
             item { TierProgressBar(settingsState.progress) }
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth().padding(12.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
@@ -138,14 +153,24 @@ fun Profile(navController: NavController,
 @Composable
 fun ProfileEntry(
     text: String,
-    value: Int?
+    value: Any
 ){
     HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.inverseOnSurface)
     Text(
         text = "${text}: $value",
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 18.dp),
         fontSize = 20.sp,
         color = MaterialTheme.colorScheme.inverseOnSurface
     )
+}
+
+
+fun getDateFromMillis(millis: Long): String {
+    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = millis
+    return formatter.format(calendar.time)
 }

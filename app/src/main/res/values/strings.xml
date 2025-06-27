@@ -54,4 +54,5 @@
     <string name="settings_desc_progress">With every time you complete a shopping list this counter increases and you win badges. You can reset this progress at any time.</string>
     <string name="settings_desc_pic">Change the picture that is displayed in profile page.</string>
     <string name="reset_progress_text">Progress made with completed shopping lists will be reset. Confirm?</string>
+    <string name="latest_shopping">Latest Shopping</string>
 </resources>

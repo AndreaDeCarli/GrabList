@@ -144,9 +144,6 @@ class LocationService(private val ctx: Context) {
     private val _coordinates = MutableStateFlow<Location?>(null)
     val coordinates = _coordinates.asStateFlow()
 
-    private val _isLoadingLocation = MutableStateFlow(false)
-    val isLoadingLocation = _isLoadingLocation.asStateFlow()
-
     suspend fun getCurrentLocation(usePreciseLocation: Boolean = false): Location? {
         val locationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!locationEnabled) throw IllegalStateException("Location is disabled")
@@ -157,7 +154,6 @@ class LocationService(private val ctx: Context) {
         ) == PackageManager.PERMISSION_GRANTED
         if (!permissionGranted) throw SecurityException("Location permission not granted")
 
-        _isLoadingLocation.value = true
         val location = withContext(Dispatchers.IO) {
             fusedLocationClient.getCurrentLocation(
                 if (usePreciseLocation) Priority.PRIORITY_HIGH_ACCURACY
@@ -165,7 +161,6 @@ class LocationService(private val ctx: Context) {
                 CancellationTokenSource().token
             ).await()
         }
-        _isLoadingLocation.value = false
 
         _coordinates.value =
             if (location != null) Location("", latitude = location.latitude, longitude = location.longitude)

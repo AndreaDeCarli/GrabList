@@ -54,4 +54,5 @@
     <string name="settings_desc_progress">Ogni volta che completi una spesa questo contatore aumenta e vinci delle medaglie. Puoi resettare il progresso in qualunque momento.</string>
     <string name="settings_desc_pic">Cambia l\'immagine che viene mostrata nella pagina del profilo.</string>
     <string name="reset_progress_text">Il progresso fatto completando le spese verrà resettato. Confermi?</string>
+    <string name="latest_shopping">Ultima spesa</string>
 </resources>

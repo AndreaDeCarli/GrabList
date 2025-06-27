@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.grablist.data.database.Product
 import com.example.grablist.ui.screens.ActiveShoppingScreen
 import com.example.grablist.ui.screens.AddNewList
 import com.example.grablist.ui.screens.AddNewProduct
